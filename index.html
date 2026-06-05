@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#3A2E22">
+<title>Inglés · Inspiración Artesana</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FAF4EA;
+    --paper:#F3E9D8;
+    --card:#FFFDF8;
+    --tan:#EAD9BE;
+    --clay:#C2703D;
+    --clay-d:#A65C2E;
+    --terra:#D98A4E;
+    --sage:#7E8C5C;
+    --sage-d:#5F6C42;
+    --ink:#3A2E22;
+    --ink-soft:#6B5B49;
+    --gold:#D9A441;
+    --line:#E2D2B6;
+    --shadow:rgba(58,46,34,.14);
+    --display:'Fraunces',Georgia,serif;
+    --body:'DM Sans',system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    font-family:var(--body);
+    color:var(--ink);
+    background:
+      radial-gradient(120% 80% at 100% 0%, #F6ECD7 0%, rgba(246,236,215,0) 55%),
+      radial-gradient(120% 70% at 0% 100%, #EFE2C9 0%, rgba(239,226,201,0) 50%),
+      var(--cream);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  /* subtle woven texture */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;opacity:.05;z-index:0;
+    background-image:repeating-linear-gradient(45deg,#3A2E22 0 1px,transparent 1px 7px),
+                     repeating-linear-gradient(-45deg,#3A2E22 0 1px,transparent 1px 7px);
+  }
+  .app{max-width:480px;margin:0 auto;min-height:100%;position:relative;z-index:1;padding-bottom:96px}
+
+  /* HEADER */
+  header{
+    padding:22px 20px 16px;text-align:center;position:relative;
+  }
+  .kicker{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--clay);font-weight:700}
+  header h1{font-family:var(--display);font-weight:600;font-size:27px;line-height:1.05;margin:6px 0 2px;font-optical-sizing:auto}
+  header h1 em{font-style:italic;color:var(--clay)}
+  .sub{font-size:13px;color:var(--ink-soft);max-width:300px;margin:6px auto 0}
+  .basket{font-size:30px;display:block;margin-bottom:2px;filter:saturate(.9)}
+
+  /* SECTIONS */
+  main{padding:4px 16px}
+  .view{display:none;animation:rise .45s cubic-bezier(.2,.7,.3,1) both}
+  .view.active{display:block}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  .view-head{margin:6px 2px 14px}
+  .view-head h2{font-family:var(--display);font-size:23px;font-weight:600;display:flex;align-items:center;gap:9px}
+  .view-head p{font-size:13px;color:var(--ink-soft);margin-top:3px;line-height:1.4}
+
+  /* SCENARIO ACCORDION */
+  .scn{background:var(--card);border:1px solid var(--line);border-radius:16px;margin-bottom:12px;overflow:hidden;box-shadow:0 2px 10px var(--shadow)}
+  .scn-head{display:flex;align-items:center;gap:12px;padding:15px 16px;cursor:pointer;user-select:none}
+  .scn-ico{width:38px;height:38px;flex:0 0 38px;border-radius:11px;display:grid;place-items:center;font-size:19px;background:var(--paper);border:1px solid var(--line)}
+  .scn-title{flex:1}
+  .scn-title b{font-family:var(--display);font-weight:600;font-size:16.5px;display:block;line-height:1.1}
+  .scn-title span{font-size:11.5px;color:var(--ink-soft)}
+  .chev{transition:transform .3s;color:var(--clay);font-size:14px}
+  .scn.open .chev{transform:rotate(180deg)}
+  .scn-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+  .scn-inner{padding:2px 14px 14px}
+
+  /* PHRASE CARD */
+  .ph{padding:13px 0;border-top:1px dashed var(--line)}
+  .ph:first-child{border-top:none}
+  .ph-top{display:flex;align-items:flex-start;gap:10px}
+  .ph-en{flex:1;font-family:var(--display);font-weight:600;font-size:17px;line-height:1.25;color:var(--ink)}
+  .ph-fon{font-size:13.5px;color:var(--clay-d);font-style:italic;margin-top:4px}
+  .ph-fon::before{content:"🗣 ";font-style:normal;opacity:.7}
+  .ph-es{font-size:13px;color:var(--ink-soft);margin-top:3px}
+  .play{flex:0 0 auto;width:40px;height:40px;border-radius:50%;border:none;background:var(--clay);color:#fff;font-size:17px;display:grid;place-items:center;cursor:pointer;box-shadow:0 3px 8px rgba(194,112,61,.4);transition:transform .15s}
+  .play:active{transform:scale(.88)}
+  .play.speaking{animation:pulse 1s infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 3px 8px rgba(194,112,61,.4)}50%{box-shadow:0 0 0 8px rgba(194,112,61,.12)}}
+
+  /* DIAGNÓSTICO */
+  .diag{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:13px;box-shadow:0 2px 10px var(--shadow)}
+  .diag-n{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--clay);font-weight:700}
+  .diag-sit{font-size:15px;line-height:1.4;margin:7px 0 4px;font-weight:500}
+  .diag-cue{font-size:12.5px;color:var(--ink-soft);font-style:italic}
+  .reveal-btn{margin-top:11px;width:100%;background:var(--paper);border:1px dashed var(--clay);color:var(--clay-d);padding:10px;border-radius:11px;font-family:var(--body);font-weight:600;font-size:13.5px;cursor:pointer}
+  .answer{display:none;margin-top:11px;background:var(--paper);border-radius:12px;padding:12px;border:1px solid var(--line)}
+  .answer.show{display:block;animation:rise .3s both}
+  .answer .ph-en{font-size:15.5px}
+  .rate{display:flex;gap:7px;margin-top:11px}
+  .rate button{flex:1;border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 4px;font-family:var(--body);font-size:11.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;line-height:1.2;transition:.15s}
+  .rate button .em{display:block;font-size:17px;margin-bottom:2px}
+  .rate button.sel{background:var(--sage);border-color:var(--sage-d);color:#fff;transform:translateY(-1px)}
+  #resultBtn{width:100%;background:linear-gradient(180deg,var(--clay),var(--clay-d));color:#fff;border:none;padding:15px;border-radius:14px;font-family:var(--display);font-weight:600;font-size:16px;cursor:pointer;margin-top:4px;box-shadow:0 6px 16px rgba(194,112,61,.35);opacity:.5;pointer-events:none;transition:.25s}
+  #resultBtn.ready{opacity:1;pointer-events:auto}
+  #resultPanel{display:none;background:var(--card);border:1.5px solid var(--clay);border-radius:18px;padding:22px 18px;text-align:center;box-shadow:0 8px 24px var(--shadow)}
+  #resultPanel.show{display:block;animation:rise .4s both}
+  #resultPanel .lvl-em{font-size:46px}
+  #resultPanel h3{font-family:var(--display);font-size:25px;margin:6px 0 4px;color:var(--clay-d)}
+  #resultPanel .lvl-score{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);font-weight:700}
+  #resultPanel p{font-size:14px;line-height:1.5;color:var(--ink-soft);margin:12px 0 16px}
+  .ghost-btn{background:transparent;border:1px solid var(--clay);color:var(--clay-d);padding:11px 18px;border-radius:12px;font-family:var(--body);font-weight:600;font-size:14px;cursor:pointer}
+
+  /* RESCATE */
+  .rescue{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:14px;padding:13px 14px;margin-bottom:10px;box-shadow:0 2px 8px var(--shadow)}
+
+  /* FLASHCARDS */
+  .fc-stage{perspective:1200px;margin:8px 0 16px}
+  .fc{position:relative;width:100%;height:340px;transition:transform .6s cubic-bezier(.3,.7,.3,1);transform-style:preserve-3d;cursor:pointer}
+  .fc.flip{transform:rotateY(180deg)}
+  .fc-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:22px;padding:26px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:0 10px 30px var(--shadow);border:1px solid var(--line)}
+  .fc-front{background:linear-gradient(160deg,#FFFDF8,#F3E7D2)}
+  .fc-back{background:linear-gradient(160deg,var(--ink),#4A3B2C);color:var(--cream);transform:rotateY(180deg)}
+  .fc-tag{font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;opacity:.7;margin-bottom:14px}
+  .fc-front .fc-tag{color:var(--clay)}
+  .fc-front .big{font-family:var(--display);font-weight:600;font-size:27px;line-height:1.18;color:var(--ink)}
+  .fc-back .fon{font-family:var(--display);font-style:italic;font-size:22px;color:var(--gold);line-height:1.25;margin-bottom:14px}
+  .fc-back .es{font-size:16px;opacity:.92;line-height:1.35}
+  .fc-hint{position:absolute;bottom:16px;left:0;right:0;font-size:11px;opacity:.55}
+  .fc-ctrl{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .fc-ctrl button{border:none;background:var(--card);border:1px solid var(--line);width:52px;height:52px;border-radius:50%;font-size:20px;cursor:pointer;color:var(--ink);box-shadow:0 3px 8px var(--shadow);display:grid;place-items:center}
+  .fc-ctrl .big-play{background:var(--clay);color:#fff;border:none}
+  .fc-count{font-size:13px;font-weight:600;color:var(--ink-soft);min-width:54px;text-align:center}
+  .fc-shuffle{width:100%;margin-top:14px;background:var(--paper);border:1px solid var(--line);color:var(--ink-soft);padding:11px;border-radius:12px;font-family:var(--body);font-weight:600;font-size:13px;cursor:pointer}
+
+  /* HISTORIA */
+  .story-card{background:linear-gradient(165deg,var(--ink),#4A3B2C);color:var(--cream);border-radius:20px;padding:22px;margin-bottom:14px;box-shadow:0 8px 22px var(--shadow);position:relative;overflow:hidden}
+  .story-card::after{content:"🧺";position:absolute;font-size:120px;right:-24px;bottom:-30px;opacity:.07}
+  .story-card .ph-en{color:var(--cream)}
+  .story-card .ph-fon{color:var(--gold)}
+  .story-card .ph-es{color:rgba(250,244,234,.7)}
+  .story-card .ph{border-color:rgba(255,255,255,.13)}
+  .story-card .play{background:var(--gold);box-shadow:none}
+  .note{font-size:12px;color:var(--ink-soft);background:var(--paper);border:1px dashed var(--line);border-radius:12px;padding:12px;line-height:1.5;margin-bottom:14px}
+  .note b{color:var(--clay-d)}
+
+  /* NAV */
+  nav{position:fixed;bottom:0;left:0;right:0;z-index:30;background:rgba(255,253,248,.92);backdrop-filter:blur(12px);border-top:1px solid var(--line);max-width:480px;margin:0 auto;display:flex;padding:8px 4px calc(8px + env(safe-area-inset-bottom));box-shadow:0 -4px 20px rgba(58,46,34,.08)}
+  .nav-btn{flex:1;background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;cursor:pointer;color:var(--ink-soft);font-family:var(--body);font-size:10px;font-weight:600;transition:.2s}
+  .nav-btn .ni{font-size:20px;transition:transform .2s}
+  .nav-btn.on{color:var(--clay)}
+  .nav-btn.on .ni{transform:translateY(-2px) scale(1.12)}
+  .nav-btn.on .nl{font-weight:700}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <span class="basket">🧺</span>
+    <span class="kicker">Inspiración Artesana</span>
+    <h1>English para <em>atender</em></h1>
+    <p class="sub">Tu práctica de inglés para vender en Plaza Francia y a turistas ✨</p>
+  </header>
+
+  <main>
+    <!-- ============ NIVEL ============ -->
+    <section id="nivel" class="view active">
+      <div class="view-head">
+        <h2>📋 ¿Cuál es tu nivel?</h2>
+        <p>Leé cada situación y respondé en inglés en voz alta (como te salga). Después mirá la respuesta sugerida y marcá cómo te fue.</p>
+      </div>
+      <div id="diagList"></div>
+      <button id="resultBtn">Ver mi resultado</button>
+      <div id="resultPanel"></div>
+    </section>
+
+    <!-- ============ FRASES ============ -->
+    <section id="frases" class="view">
+      <div class="view-head">
+        <h2>💬 Frases por escenario</h2>
+        <p>Tocá cada tema para abrirlo. El botón naranja 🔊 reproduce la frase en inglés.</p>
+      </div>
+      <div id="scnList"></div>
+    </section>
+
+    <!-- ============ RESCATE ============ -->
+    <section id="rescate" class="view">
+      <div class="view-head">
+        <h2>🆘 Frases de rescate</h2>
+        <p>Para cuando no entendés algo o necesitás un segundo. ¡Usarlas está perfecto!</p>
+      </div>
+      <div id="rescueList"></div>
+    </section>
+
+    <!-- ============ TARJETAS ============ -->
+    <section id="tarjetas" class="view">
+      <div class="view-head">
+        <h2>🃏 Modo práctica</h2>
+        <p>Tocá la tarjeta para darla vuelta. Probá decir la frase antes de mirar.</p>
+      </div>
+      <div class="fc-stage">
+        <div class="fc" id="card" onclick="flip()">
+          <div class="fc-face fc-front">
+            <div class="fc-tag">English</div>
+            <div class="big" id="fcEn"></div>
+            <div class="fc-hint">👆 tocá para ver traducción</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="fc-tag">Pronunciación · Español</div>
+            <div class="fon" id="fcFon"></div>
+            <div class="es" id="fcEs"></div>
+            <div class="fc-hint">👆 tocá para volver</div>
+          </div>
+        </div>
+      </div>
+      <div class="fc-ctrl">
+        <button onclick="prevCard()">‹</button>
+        <button class="big-play" onclick="event.stopPropagation();speakCurrentCard()">🔊</button>
+        <span class="fc-count" id="fcCount">1 / 1</span>
+        <button onclick="nextCard()">›</button>
+      </div>
+      <button class="fc-shuffle" onclick="shuffleCards()">🔀 Mezclar las tarjetas</button>
+    </section>
+
+    <!-- ============ HISTORIA ============ -->
+    <section id="historia" class="view">
+      <div class="view-head">
+        <h2>🌿 El diferencial</h2>
+        <p>Lo que hace especial al producto. Contarlo ayuda muchísimo a cerrar ventas con turistas.</p>
+      </div>
+      <div class="story-card" id="storyList"></div>
+      <div class="note">
+        💡 <b>Tip:</b> a los turistas les encanta saber que es <b>hecho por vos, a medida y con fibras naturales</b>. Eso vale más que el precio. Si algún día querés sumar la historia de cómo empezaste, decime y le agrego las frases.
+      </div>
+    </section>
+  </main>
+
+  <nav>
+    <button class="nav-btn on" data-v="nivel"><span class="ni">📋</span><span class="nl">Nivel</span></button>
+    <button class="nav-btn" data-v="frases"><span class="ni">💬</span><span class="nl">Frases</span></button>
+    <button class="nav-btn" data-v="rescate"><span class="ni">🆘</span><span class="nl">Rescate</span></button>
+    <button class="nav-btn" data-v="tarjetas"><span class="ni">🃏</span><span class="nl">Tarjetas</span></button>
+    <button class="nav-btn" data-v="historia"><span class="ni">🌿</span><span class="nl">Historia</span></button>
+  </nav>
+</div>
+
+<script>
+/* ===================== DATA ===================== */
+/* fon = fonética casera argentina */
+const scenarios = [
+  { ico:"👋", title:"Recibir y saludar", sub:"Cuando se acerca un cliente", phrases:[
+    {en:"Hello! Welcome.", fon:"Jelóu! Uélcam", es:"¡Hola! Bienvenido/a."},
+    {en:"Hi! How are you?", fon:"Jái! Jáu ar iú?", es:"¡Hola! ¿Cómo estás?"},
+    {en:"How can I help you?", fon:"Jáu can ái jelp iú?", es:"¿En qué te puedo ayudar?"},
+    {en:"Feel free to look around.", fon:"Fíl frí tu luk aráund", es:"Mirá tranquilo/a, sin apuro."},
+    {en:"Let me know if you have any questions.", fon:"Let mi nóu if iú jav éni cuéschens", es:"Cualquier cosa, preguntame."},
+  ]},
+  { ico:"🧺", title:"Presentar el producto", sub:"Material, técnica, usos y tamaños", phrases:[
+    {en:"I make each piece myself.", fon:"Ái méik ich pis maisélf", es:"Cada pieza la hago yo."},
+    {en:"Yes, they are handcrafted. I sew the rope myself.", fon:"Iés, déi ar jándcráfted. Ái so de róup maisélf", es:"Sí, son artesanales. Coso la soga yo misma."},
+    {en:"It's a Nordic coiled-rope technique.", fon:"Its a nórdic cóild-róup tecník", es:"Es una técnica nórdica de soga enrollada."},
+    {en:"They're made of natural fibers: jute, cotton and rope.", fon:"Déir méid ov nátural fáibers: shút, cótn and róup", es:"Están hechos de fibras naturales: yute, algodón y soga."},
+    {en:"Jute is a natural fiber.", fon:"Shút is a nátural fáiber", es:"El yute es una fibra natural."},
+    {en:"You can use it in the kitchen, the bathroom or as decoration.", fon:"Iú can iús it in de kítchen, de bázrum or as decoréishon", es:"Lo podés usar en la cocina, el baño o como decoración."},
+    {en:"It works as a bread basket, a fruit bowl or a trivet.", fon:"It uérks as a bréd básket, a frút ból or a trívet", es:"Sirve como panera, frutera o apoya-fuentes."},
+    {en:"The big baskets are great for blankets, toys or laundry.", fon:"De big báskets ar gréit for blánkets, tóis or lóndri", es:"Los canastos grandes van bárbaro para mantas, juguetes o ropa."},
+    {en:"They can also be used as planters.", fon:"Déi can ólso bi iúsd as plánters", es:"También se pueden usar como maceteros."},
+    {en:"It's perfect for organizing.", fon:"Its pérfect for órganaisin", es:"Es perfecto para organizar."},
+    {en:"They come in different sizes: Mini, S, M, L, XL and XXL.", fon:"Déi cam in díferent sáises: míni, es, em, el, ex-el and dóbol ex-el", es:"Vienen en distintos tamaños: Mini, S, M, L, XL y XXL."},
+    {en:"Which size do you need?", fon:"Uích sáis du iú níd?", es:"¿Qué tamaño necesitás?"},
+  ]},
+  { ico:"💲", title:"Precios", sub:"Cuánto cuesta y descuentos", phrases:[
+    {en:"It's [number] pesos.", fon:"Its [númber] pésos", es:"Cuesta [número] pesos."},
+    {en:"Prices range from 3,500 to 40,000 pesos.", fon:"Práises réinch from zri záusand fáiv jándred tu fórti záusand pésos", es:"Los precios van de 3.500 a 40.000 pesos."},
+    {en:"The price depends on the size and the material.", fon:"De práis dipénds on de sáis and de matírial", es:"El precio depende del tamaño y del material."},
+    {en:"This price is for cash or bank transfer.", fon:"Dis práis is for cash or bánk tránsfer", es:"Este precio es en efectivo o transferencia."},
+    {en:"Card or QR have a 10% surcharge.", fon:"Card or kiú-ar jav a ten per-sént sércharch", es:"Tarjeta o QR tienen 10% de recargo."},
+    {en:"Yes, if you buy several, the price is better.", fon:"Iés, if iú bái séveral, de práis is béter", es:"Sí, si comprás varios, sale más barato."},
+    {en:"Coasters and placemats are sold one by one.", fon:"Cóusters and pléismats ar sóuld uán bái uán", es:"Los posavasos e individuales se venden de a uno."},
+  ]},
+  { ico:"📦", title:"Envíos y pagos", sub:"Cómo paga y cómo lo recibe", phrases:[
+    {en:"How would you like to pay?", fon:"Jáu wud iú láik tu péi?", es:"¿Cómo querés pagar?"},
+    {en:"Cash, transfer, card or QR?", fon:"Cash, tránsfer, card or kiú-ar?", es:"¿Efectivo, transferencia, tarjeta o QR?"},
+    {en:"I accept US dollars, at the blue rate.", fon:"Ái accépt iú-és dólars, at de blú réit", es:"Acepto dólares, a cotización blue."},
+    {en:"I ship within Argentina by Correo Argentino.", fon:"Ái ship uidín Aryentína bái Coréo Aryentíno", es:"Hago envíos dentro de Argentina por Correo Argentino."},
+    {en:"Shipping is paid by the buyer.", fon:"Shípin is péid bái de báier", es:"El envío lo paga el comprador."},
+    {en:"Yes, I ship abroad. The buyer covers the cost.", fon:"Iés, ái ship abród. De báier cávers de cost", es:"Sí, envío al exterior. El costo lo paga el comprador."},
+    {en:"You can pick it up at my workshop in Palermo.", fon:"Iú can pik it ap at mái uérkshop in Palérmo", es:"Lo podés retirar por mi taller en Palermo."},
+    {en:"Or at Plaza Francia on weekends and holidays.", fon:"Or at Plása Fránsia on uíkends and jólideis", es:"O en Plaza Francia los fines de semana y feriados."},
+    {en:"If it's in stock, I can ship it within 24 hours.", fon:"If its in stok, ái can ship it uidín tuénti-fór áuers", es:"Si hay stock, lo envío en 24 horas."},
+  ]},
+  { ico:"✏️", title:"Encargos personalizados", sub:"A medida, color y material", phrases:[
+    {en:"I can make it in any size or material you like.", fon:"Ái can méik it in éni sáis or matírial iú láik", es:"Lo puedo hacer en el tamaño o material que quieras."},
+    {en:"Do you have a custom order in mind?", fon:"Du iú jav a cástom órder in máind?", es:"¿Tenés algo a medida en mente?"},
+    {en:"Tell me the size and the color you want.", fon:"Tel mi de sáis and de cólor iú uánt", es:"Decime el tamaño y el color que querés."},
+    {en:"Custom orders take from 2 to 15 days.", fon:"Cástom órders téik from tu tu fíftin déis", es:"Los pedidos a medida tardan de 2 a 15 días."},
+    {en:"I'll send you a photo when it's ready.", fon:"Áil send iú a fóto uén its rédi", es:"Te mando una foto cuando esté listo."},
+  ]},
+  { ico:"🧼", title:"Cuidado del producto", sub:"Cómo mantenerlo lindo", phrases:[
+    {en:"To clean it, wipe it with a dry or slightly damp cloth.", fon:"Tu clín it, uáip it uíd a drái or sláitli damp cloz", es:"Para limpiarlo, pasale un trapo seco o apenas húmedo."},
+    {en:"Keep it away from direct water.", fon:"Kíp it auéi from dairéct uóter", es:"Mantenelo lejos del agua directa."},
+    {en:"Please don't machine wash it.", fon:"Plís dont mashín uósh it", es:"No lo laves en el lavarropas."},
+    {en:"Let it dry in the shade.", fon:"Let it drái in de shéid", es:"Dejalo secar a la sombra."},
+    {en:"With a little care, natural fibers last for years.", fon:"Uíd a lítol ker, nátural fáibers last for íers", es:"Con un poco de cuidado, las fibras naturales duran años."},
+  ]},
+  { ico:"🙏", title:"Cierre y agradecimiento", sub:"Despedir bien al cliente", phrases:[
+    {en:"Thank you so much!", fon:"Zénk iú so mach!", es:"¡Muchas gracias!"},
+    {en:"I hope you love it.", fon:"Ái jóup iú lav it", es:"Espero que te encante."},
+    {en:"Enjoy it!", fon:"Inshói it!", es:"¡Que lo disfrutes!"},
+    {en:"Come back any time.", fon:"Cam bák éni táim", es:"Volvé cuando quieras."},
+    {en:"Have a great day!", fon:"Jav a gréit déi!", es:"¡Que tengas un lindo día!"},
+    {en:"You can follow us online to see more.", fon:"Iú can fólou as onláin tu si mor", es:"Nos podés seguir online para ver más."},
+  ]},
+];
+
+const rescue = [
+  {en:"Sorry, could you repeat that, please?", fon:"Sóri, cud iú ripít dat, plís?", es:"Perdón, ¿lo podés repetir?"},
+  {en:"One moment, please.", fon:"Uán móment, plís", es:"Un momento, por favor."},
+  {en:"Let me check.", fon:"Let mi chék", es:"Dejame chequear / fijarme."},
+  {en:"I didn't understand. Can you say it slower?", fon:"Ái dídent anderstánd. Can iú séi it slóuer?", es:"No entendí. ¿Más despacio?"},
+  {en:"Could you write it down, please?", fon:"Cud iú ráit it dáun, plís?", es:"¿Me lo podés escribir?"},
+  {en:"Do you speak Spanish?", fon:"Du iú spík spánish?", es:"¿Hablás español?"},
+  {en:"My English is not perfect, sorry!", fon:"Mái ínglish is not pérfect, sóri!", es:"Mi inglés no es perfecto, ¡perdón!"},
+  {en:"Just a second, let me find it.", fon:"Shast a sécond, let mi fáind it", es:"Un segundo, lo busco."},
+];
+
+const story = [
+  {en:"Everything is made by me, one piece at a time.", fon:"Évrizin is méid bái mi, uán pis at a táim", es:"Todo lo hago yo, pieza por pieza."},
+  {en:"It's a Nordic coiled-rope technique.", fon:"Its a nórdic cóild-róup tecník", es:"Es una técnica nórdica de soga enrollada."},
+  {en:"I use natural fibers, like jute and cotton.", fon:"Ái iús nátural fáibers, láik shút and cótn", es:"Uso fibras naturales, como yute y algodón."},
+  {en:"Each piece is made to last.", fon:"Ich pis is méid tu last", es:"Cada pieza está hecha para durar."},
+  {en:"I can make any design, made to measure.", fon:"Ái can méik éni disáin, méid tu méshur", es:"Puedo hacer cualquier diseño, a medida."},
+  {en:"It's a unique, handmade piece of Argentine craft.", fon:"Its a iuník, jándméid pis ov Aryentín craft", es:"Es una pieza única, artesanal, de artesanía argentina."},
+];
+
+const diagnostics = [
+  {n:"Situación 1", sit:"Se acerca un turista a tu puesto y te mira.", cue:"Saludá y ofrecé ayuda en inglés.", ans:{en:"Hello! Welcome. How can I help you?", fon:"Jelóu! Uélcam. Jáu can ái jelp iú?", es:"¡Hola! Bienvenido/a. ¿En qué te puedo ayudar?"}},
+  {n:"Situación 2", sit:"Te señala un canasto y pregunta: \u201CHow much is this?\u201D", cue:"Decile el precio y cómo puede pagar.", ans:{en:"It's 40,000 pesos. Cash or transfer, or card with a 10% surcharge.", fon:"Its fórti záusand pésos. Cash or tránsfer, or card uíd a ten per-sént sércharch", es:"Cuesta 40.000 pesos. Efectivo o transferencia, o tarjeta con 10% de recargo."}},
+  {n:"Situación 3", sit:"Pregunta: \u201CAre these handmade? What are they made of?\u201D", cue:"Contale que los hacés vos y de qué material son.", ans:{en:"Yes, I make them myself. They're made of natural fibers, like jute and cotton.", fon:"Iés, ái méik dem maisélf. Déir méid ov nátural fáibers, láik shút and cótn", es:"Sí, los hago yo. Son de fibras naturales, como yute y algodón."}},
+  {n:"Situación 4", sit:"Es de otro país y pregunta si podés mandárselo.", cue:"Decile que sí, que el envío lo paga el comprador.", ans:{en:"Yes, I can ship abroad. The shipping is paid by the buyer.", fon:"Iés, ái can ship abród. De shípin is péid bái de báier", es:"Sí, puedo enviar al exterior. El envío lo paga el comprador."}},
+  {n:"Situación 5", sit:"Quiere un canasto más grande y en otro color.", cue:"Ofrecele hacerlo a medida y contale el tiempo.", ans:{en:"I can make it to measure. Custom orders take from 2 to 15 days.", fon:"Ái can méik it tu méshur. Cástom órders téik from tu tu fíftin déis", es:"Lo puedo hacer a medida. Los pedidos tardan de 2 a 15 días."}},
+  {n:"Situación 6", sit:"Decidió comprar y te está pagando.", cue:"Agradecé y despedite con calidez.", ans:{en:"Thank you so much! I hope you love it. Have a great day!", fon:"Zénk iú so mach! Ái jóup iú lav it. Jav a gréit déi!", es:"¡Muchas gracias! Espero que te encante. ¡Que tengas un lindo día!"}},
+];
+
+/* ===================== VOZ (Web Speech) ===================== */
+let enVoice = null;
+function pickVoice(){
+  const vs = speechSynthesis.getVoices();
+  enVoice = vs.find(v=>/en[-_]GB/i.test(v.lang)) ||
+            vs.find(v=>/en[-_]US/i.test(v.lang)) ||
+            vs.find(v=>/^en/i.test(v.lang)) || null;
+}
+if('speechSynthesis' in window){
+  pickVoice();
+  speechSynthesis.onvoiceschanged = pickVoice;
+}
+function speak(text, btn){
+  if(!('speechSynthesis' in window)){ alert('Tu navegador no permite escuchar el audio. Probá con Chrome o Safari.'); return; }
+  speechSynthesis.cancel();
+  const clean = text.replace(/\[number\]/gi,'').replace(/\[número\]/gi,'');
+  const u = new SpeechSynthesisUtterance(clean);
+  u.lang = enVoice ? enVoice.lang : 'en-US';
+  if(enVoice) u.voice = enVoice;
+  u.rate = 0.92; u.pitch = 1;
+  if(btn){ u.onstart=()=>btn.classList.add('speaking'); u.onend=()=>btn.classList.remove('speaking'); u.onerror=()=>btn.classList.remove('speaking'); }
+  speechSynthesis.speak(u);
+}
+
+/* ===================== RENDER FRASES ===================== */
+function phraseCard(p){
+  return `<div class="ph"><div class="ph-top">
+    <div style="flex:1">
+      <div class="ph-en">${p.en}</div>
+      <div class="ph-fon">${p.fon}</div>
+      <div class="ph-es">${p.es}</div>
+    </div>
+    <button class="play" onclick="speak(this.dataset.t,this)" data-t="${p.en.replace(/"/g,'&quot;')}">🔊</button>
+  </div></div>`;
+}
+const scnList = document.getElementById('scnList');
+scenarios.forEach((s,i)=>{
+  const el = document.createElement('div');
+  el.className='scn';
+  el.innerHTML = `<div class="scn-head" onclick="toggleScn(this)">
+      <div class="scn-ico">${s.ico}</div>
+      <div class="scn-title"><b>${s.title}</b><span>${s.sub} · ${s.phrases.length} frases</span></div>
+      <span class="chev">▾</span>
+    </div>
+    <div class="scn-body"><div class="scn-inner">${s.phrases.map(phraseCard).join('')}</div></div>`;
+  scnList.appendChild(el);
+});
+function toggleScn(head){
+  const scn = head.parentElement;
+  const body = scn.querySelector('.scn-body');
+  const open = scn.classList.toggle('open');
+  body.style.maxHeight = open ? body.scrollHeight+'px' : '0';
+}
+
+/* ===================== RENDER RESCATE ===================== */
+document.getElementById('rescueList').innerHTML = rescue.map(p=>
+  `<div class="rescue">${phraseCard(p)}</div>`).join('');
+
+/* ===================== RENDER HISTORIA ===================== */
+document.getElementById('storyList').innerHTML = story.map(phraseCard).join('');
+
+/* ===================== DIAGNÓSTICO ===================== */
+const ratings = {};
+const diagList = document.getElementById('diagList');
+diagnostics.forEach((d,i)=>{
+  const el = document.createElement('div');
+  el.className='diag';
+  el.innerHTML = `<div class="diag-n">${d.n}</div>
+    <div class="diag-sit">${d.sit}</div>
+    <div class="diag-cue">👉 ${d.cue}</div>
+    <button class="reveal-btn" onclick="reveal(${i},this)">👀 Ver respuesta sugerida</button>
+    <div class="answer" id="ans${i}">
+      ${phraseCard(d.ans)}
+      <div class="rate">
+        <button onclick="rate(${i},2,this)"><span class="em">😄</span>Lo dije bien</button>
+        <button onclick="rate(${i},1,this)"><span class="em">🙂</span>Algo parecido</button>
+        <button onclick="rate(${i},0,this)"><span class="em">😅</span>No me salió</button>
+      </div>
+    </div>`;
+  diagList.appendChild(el);
+});
+function reveal(i,btn){
+  document.getElementById('ans'+i).classList.add('show');
+  btn.style.display='none';
+}
+function rate(i,val,btn){
+  ratings[i]=val;
+  btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  if(Object.keys(ratings).length===diagnostics.length){
+    document.getElementById('resultBtn').classList.add('ready');
+  }
+}
+document.getElementById('resultBtn').onclick = ()=>{
+  const score = Object.values(ratings).reduce((a,b)=>a+b,0); // 0..12
+  let em,lvl,msg;
+  if(score<=4){ em="🌱"; lvl="Principiante"; msg="¡Arrancaste! Empezá por las <b>frases de saludo</b> y las de <b>rescate</b>: con esas ya podés atender. Practicá 3 frases por día con el modo Tarjetas y vas a ver el cambio rapidísimo."; }
+  else if(score<=8){ em="🌿"; lvl="Básico"; msg="¡Muy bien! Ya te defendés. Ahora reforzá <b>precios, pagos y envíos</b>, que son las preguntas que más se repiten. Usá las Tarjetas para que te salgan sin pensar."; }
+  else{ em="🌳"; lvl="Intermedio"; msg="¡Excelente! Te manejás con soltura. Enfocate en el <b>diferencial del producto</b> y los <b>encargos a medida</b> para cerrar más ventas con turistas. Animate a charlar un poquito más con cada cliente."; }
+  const p = document.getElementById('resultPanel');
+  p.innerHTML = `<div class="lvl-em">${em}</div>
+    <div class="lvl-score">Tu nivel</div>
+    <h3>${lvl}</h3>
+    <div class="lvl-score">${score} / 12 puntos</div>
+    <p>${msg}</p>
+    <button class="ghost-btn" onclick="go('frases')">Ir a las frases →</button>`;
+  p.classList.add('show');
+  p.scrollIntoView({behavior:'smooth',block:'center'});
+};
+
+/* ===================== FLASHCARDS ===================== */
+let deck = [];
+scenarios.forEach(s=>s.phrases.forEach(p=>deck.push(p)));
+story.forEach(p=>deck.push(p));
+deck = deck.filter(p=>!/\[number\]/i.test(p.en)); // saco la plantilla de precio
+let order = deck.map((_,i)=>i);
+let idx = 0;
+function renderCard(){
+  const p = deck[order[idx]];
+  document.getElementById('card').classList.remove('flip');
+  document.getElementById('fcEn').textContent = p.en;
+  document.getElementById('fcFon').textContent = p.fon;
+  document.getElementById('fcEs').textContent = p.es;
+  document.getElementById('fcCount').textContent = (idx+1)+' / '+order.length;
+}
+function flip(){ document.getElementById('card').classList.toggle('flip'); }
+function nextCard(){ idx=(idx+1)%order.length; renderCard(); }
+function prevCard(){ idx=(idx-1+order.length)%order.length; renderCard(); }
+function shuffleCards(){ for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];} idx=0; renderCard(); }
+function speakCurrentCard(){ speak(deck[order[idx]].en); }
+renderCard();
+
+/* ===================== NAV ===================== */
+function go(v){
+  document.querySelectorAll('.view').forEach(s=>s.classList.toggle('active',s.id===v));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('.nav-btn').forEach(b=>b.onclick=()=>go(b.dataset.v));
+</script>
+</body>
+</html>
