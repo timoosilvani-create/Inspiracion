@@ -51,8 +51,8 @@ header{background:var(--tierra);color:var(--crema);position:sticky;top:0;z-index
 .mbtn i.wait{background:#D3A03E}.mbtn i.off{background:#9A8C7C}.mbtn i.err{background:var(--terra)}
 
 nav{display:flex;border-top:1px solid rgba(233,221,197,.13)}
-nav button{flex:1;padding:11px 2px 10px;font-family:'Sora';font-weight:500;font-size:10.5px;
-  letter-spacing:1.3px;text-transform:uppercase;color:rgba(233,221,197,.52);
+nav button{flex:1;padding:11px 1px 10px;font-family:'Sora';font-weight:500;font-size:9.5px;
+  letter-spacing:.7px;text-transform:uppercase;color:rgba(233,221,197,.52);
   border-bottom:2.5px solid transparent;transition:.15s}
 nav button.on{color:var(--crema);border-bottom-color:var(--terra)}
 nav .badge{display:inline-block;min-width:16px;padding:0 4px;margin-left:4px;border-radius:9px;
@@ -227,6 +227,36 @@ main{padding:14px 0 108px}
 .kpi.tot{border-top:1px solid var(--line);margin-top:4px;padding-top:8px}
 .vline .del{color:#C4B7A4;font-size:19px;line-height:1;padding:3px 2px 3px 6px;flex:none}
 
+.cal{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:10px 8px 8px;margin-bottom:11px}
+.cal .ch{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:4px}
+.cal .ch span{text-align:center;font-family:'Sora';font-weight:600;font-size:9.5px;letter-spacing:1px;color:var(--muted)}
+.cal .cg{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.cd{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  border-radius:9px;font-family:'Sora';font-weight:500;font-size:12.5px;color:var(--choco);position:relative}
+.cd.out{visibility:hidden}
+.cd.has{background:rgba(233,221,197,.5);color:var(--tierra);font-weight:600}
+.cd.hoy{box-shadow:inset 0 0 0 1.5px rgba(146,66,44,.45)}
+.cd.sel{background:var(--tierra);color:var(--crema)}
+.cd i{display:flex;gap:2px;height:5px}
+.cd i b{width:5px;height:5px;border-radius:50%}
+.cd.sel i b{box-shadow:0 0 0 1px rgba(233,221,197,.5)}
+
+.fcard{display:flex;overflow:hidden;margin-bottom:10px;cursor:pointer}
+.fcard:active{opacity:.85}
+.fc-l{width:5px;flex:none}
+.fc-b{flex:1;min-width:0;padding:12px 13px}
+.fc-n{font-family:'Sora';font-weight:600;font-size:14.5px;line-height:1.25}
+.fc-d{font-size:12.5px;color:var(--choco);margin-top:2px}
+.fc-u{font-size:12px;color:var(--muted);margin-top:1px}
+.fc-f{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+.fc-f span{font-size:11px;background:rgba(233,221,197,.5);border-radius:999px;padding:3px 9px;color:var(--choco)}
+.fc-f .ok{background:rgba(95,115,80,.14);color:#4C5C40}
+.fc-f .bad{background:rgba(146,66,44,.12);color:var(--terra)}
+.est{font-family:'Sora';font-weight:600;font-size:9.5px;letter-spacing:.8px;text-transform:uppercase;
+  border-radius:999px;padding:4px 9px;flex:none}
+.lnk{display:inline-block;background:var(--crema);color:var(--choco);border-radius:999px;padding:7px 13px;
+  font-size:13px;text-decoration:none}
+
 /* ---------- sheet ---------- */
 .ov{position:fixed;inset:0;background:rgba(40,28,21,.5);z-index:80;display:flex;align-items:flex-end;
   justify-content:center;backdrop-filter:blur(3px)}
@@ -327,6 +357,7 @@ footer{text-align:center;padding:26px 20px 34px;color:#BFB0A0;font-size:11px;let
   <nav>
    <button data-tab="stock" class="on">Stock</button>
    <button data-tab="ventas">Ventas <i class="badge hide" id="bgv">0</i></button>
+   <button data-tab="ferias">Ferias</button>
    <button data-tab="mat">Material</button>
    <button data-tab="hist">Historial</button>
   </nav>
@@ -365,6 +396,7 @@ footer{text-align:center;padding:26px 20px 34px;color:#BFB0A0;font-size:11px;let
  </section>
 
  <section id="t-ventas" class="hide"></section>
+ <section id="t-ferias" class="hide"></section>
  <section id="t-mat" class="hide"></section>
  <section id="t-hist" class="hide"></section>
 </main>
@@ -381,8 +413,9 @@ footer{text-align:center;padding:26px 20px 34px;color:#BFB0A0;font-size:11px;let
 <script>
 const LOGO = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAEsCAYAAADuLCmvAAAzsklEQVR4nO2dd7xtVXXvv6fQi/SqIEVFqXpBaUq/XOBSROwaJcYYTZ4tL0WTp4nl6TP2qJ9gQdHYHmIssQVb7FIvVcoFqdIEqSJwSv4Y8+dcZ9/Tz95rzjXn+H4+57P2XvfAWXuvMX9rzDHHHGNo+bLdcQbKMDCU+iKmYTz1BThJkU1uBJwNjAIfBb4M3BH+TbbrtpKIIRdox6mSYWAC2B24OLwHuAH4EnBGOC9Gwu9PtniN1TOa+gIKZggz5icBu2LGndqTnsQG2p3ATxJfi5MHk8DDwNrh9Q7A64HXAN8EPgJ8h+hFj4bXLtQt4AI9GCTEmwPfB7ZOeC0zsQIbeCP4FLZ2hjAPejL8jGPacHz4+QXwQeAsTMzBPepWGJ77V5xFMgn8ATP2CWAsHFP/PByu7TmD++hOhxnCxFlCPQHsD3wOOA94ObA+0YseJf3MsFhcoAfDJPbdPgCsIi62DGfwowF1OLAeNtB8gDm9DGFesmLVE8Ce2EKihHpdzPFQ6MzpMy7Qg0MGe2E45jIV1IB7LHBA45zjzIQe7hPYA/2JmFCfC/wZsA7xQe9C3Ud8YA6OiXA8Lxxz+q51bccmvQqnawwTY8/jwB7Ax7AY9bOJYRF53s4S8S9xcMhjvhh4hLy+a13LsdjqvS8SOguhV6j3Af4/tiB+CDF2PYKHz5ZETqJRGhLom4HV4fXEDL/bNlqxfwKwd+Oc4yyEplBPAIcBPwA+haWWaiHRwx6LxAfl4JBhPgRc2jiXC+PY/T8mvHdbcBaLYtSaib0Ei0//HXEh2r3pReCDcrDIIM8Nx5wEWte2MrweS3gtThlIhMeBTYB3Aj/HQmnuTS8CF+jBIkHOcaFQYY59gN0a5xxnqYwQFwz3Br4BfBLYnjhzc1ubB/4lDRbFnH8F3EMUxRwYwq5vLTzM4fQfpdwpPv1S4Hzg1MY538k8Bz4gB8skZqi3Atc0zuXGceGYyyKmUw7N+PTWwOlYxbydsLCax6ZnwQV68Og7Vhw6JxHUte2PFcmZwG3CGQzNsMczgXOAP8Vj07Pig3HwyDtY1fM+B7Sgsz5wJHE7uuMMAoU9xoEtgE8Anwe2xTM9psUH4+CRxywPOsfvfBI4MRxz8vCdMml608/DxsaJRG86xzGSBP8iBo9izquB24h1onNhKPwcDGyJhzmcdmh609sDXwHehS1a+wJiwAfi4JFHcA+WzQF5ealawNkM2wnmYQ6nTZqZHn8DfA94PLaAWH0pUx+I7aDvWfnQOXnQYhIrzq6i7Y7TFsr0GAOeDvwUK7401vj3Kqn2g7eMBE9x6Ny8AoU5DsOaiHqNaCcFaqe1BVZ86e3EfP0qszxcoNtBAn05VtluhLy8VNX63R6LReuc47SNxsYE8Ebgq1j+tNpwVYUPwnaQGF8F3NhzLhcUFz9u1t9ynMGjdZAxrFbMj4BlxI0t1eAC3Q5aKHwYuKRxLidkCyuY2iHDcVIxiony47Fa08+lsnxpF+j20JM/14VCpf/tDOwbzrl91EFOWUW9KC69MfAFrISpypoWb5/Ff8CM0CA4Pxxzm6ppV+EQNq3UOadsJrGazUp1y5FmXPqdwGnExcOiNazoD5cZ8pgvBf5AfhtWYGqYYy28FVbJqJDXtcC3WbM7Sm4oLj0O/DnwNSzjqOgMDxfo9pjAjOwW4IpwLkeBngT2wjo3+7bbcpHtPYRts34BVsCoWX0uN/sEE+MxbDH7+8CjiXHp4vDB1y4yrsvC+xw9FRVUVzaH20i5SIAfxooWHYjVa76cuBA3Rn5CrcXDfTGR3o1C0/B88KXhl+GYY4xX1ySB9jBH+TTrYnwKeArwOqyOubZb5+ZMaPHwcVijWqXhFSXSLtDtIk/kAvJd4NA17Yt1ZvYwR/moshzERsfvx4T6Q5jw5Rj20ENlG+Bs4AgKE2kfeO0iL+RK4G7yXChUNsc6wFHhnNtJPSiTZwRbL/lfwKHAz5jaFDYXtLC5Kbbr8CgKEmkfeO2ilfPfYiKtc7lyYjjmNr11Bos8agn1T4FDsBzkB4ieay62q1IFG2BlS4+mEJF2gW4frTbn2AJLyC4OALYj33CMM1gk1FrcfhdWq+VHRG86F/uVSK8PfB3bddh5kfZBl45V4ZjrQqF2bx0Zzrmt1Iu86VHMbg8H3sTU2HQOSKRHgc9iG67GsJz+TuKDrn2aLbBybpaputDe8dsBswUJ8gTwVmxR7iryCnkol38YSx08klhBsnO4QLePjPg64KbwOkfx0xT2cOBRxI02Tt3IVkexUMdBwFlEAczBliXSG2ILh0fQ0c0sLtDto6f7/cQWWDl4Hr0ovrgFVsgf3F4cQ970CLbgfQrw90zdjp2aZkz6P4D96KBI+4BLg773c5Jexdx4jWhnNrTrdBj4f8AJwJ3ERcXUSKQ3Av4T2J2OibQLdBrkMZ8/62+lR/ZxFJbC5DWinV5UXGkUy554OlYQTNuxUyOPfiuswNIOxAdL9nTiIgtEAn0ZVtkutxZYQrG8HbEpos45Ti9KafsVJtLfIB+R1iLmzlie9CZ0JHU0+wssFIUOrgWuD69zFGiI8cQTZ/0tx4lx6buxDvEfJdbMSG3fCrs8GTgTWDucz3pG6AKdDk29LgrvUxvwTMhGlhNrRGdt1E5SFD4YAl4BvIU4Q0xt4/LojwQ+TgdqSbtAp0PfveLQqY13JhTm2A3zPnTOcWZigpjj/2asMp7sKHUankT6xVgud9a7DX2gpaN3oTDnJ7m8omPCe/egnbnQNvFRrDLey4iedWqRVrjjH4GXkLFIu0Cno7lQeB95VrYTspPjyCfP1ekG2mp9OpYv/Qgx/S0VKgI1Afwbtqip+HlWuECnQ5Xtbsc6WEB6z2ImZCf7YKEOrxHtLIRHMA/1LODZ5CPSAOsCXwQeQ4bpd1ldTGUoRjdBbIGVqwcN0RNaHt677TgLQWGErwHPIYp0SpvXbHBbTKTXwYQ7mxCeD7K0yDhzboEldG0nhKOHOZyFoof8V4iedOrsDsWjDwA+SGY7DV2g82AV+SfO69qehu3G8jCHsxgU7vgq8GfEUEdKkVZmx59jqYHZLBr6AEtLswXWHeS9UKga0evjrbCcpSEB/DQmijmUK9U1fADYn0wWDX2ApUULhfcQK9vlulDYZGU4duFanTyRSH8MeANxx2EqFHteB/h3rMdh8lmtC3R69JQ+Lxxz9aAh2suhwJZ4jWhnaShP+p3Au0lfu0OLhrsAp5FBGM8FOh8uCMecBU+bDDbBRBoymAY6naXZ8/BvsDZVqUVai4bPBl5F4lCHC3R6FCa4kA7UBiAu6CibI2eP38kfbf8eBv4U+AHpwx1Kf30PsBcJ86NdoNMjgbsea4MFecd2tV33CKwQuhdPcpaKxsDDWDfuK4iLdinQYv26wBnYwniS/GgX6PRow8qDWKFzyF+gJ7Dk/gMb5xxnKWj2eAfwLOB3pN1tqFDHPsDbSORF+8DKAz2Zz+t5nysaNF4j2uknikdfDryQGE5LFUaTF/864GgSbGJxgc4DGWAXFgoh2s2R2DTQszmcfqHMjm8Bf0v6UIfCHR/GFseVGtsKLtB5IIG+FOv2nbpGwVzo+nbFWmElT0dyikI50u/FYsApMzuaqXfvpeXcaB9UeaCQwQ3EhcKcBRri4uCx4b170E4/Ucz3ldjMMmVmhx4Qp2I10VsLdbhA54PaAinMkfNCIUTbORYT5zFcpJ3+IQflQeB5WJ/DlDNL/e0PY9lLrYQ6XKDzQTf7/Fl/Kx8Um3sSsHc45/bk9JMJzHu9GuvIonowKURaGSU7Af+XlkIdPqDyQUZ3YTjmvmFFg2UUWNE45zj9RPHoLxO3g6cKdSge/UosxXTgoQ4X6HxQSONy4C7yrmwnJMgriYLtOP1GQvgPwDmYSKcIAcreR7BQxygDDnW4QOfFEHAn+bfAErKfZdgqt2dzOINAudAPAy/CenhCmvGhtL99gNcw4FCHD6Z80I5CiDsKu+BBj2O50MvDe7cpZxBop+HVwKtJu8tQf/tNWPOKgYm0D6a8kCD/PBy7FNNdSSx84ziDQGsenwK+QLp4tMKPG2OlUgcW5nCBzgsJ9CXEuFvuXrRs6OnAdmRQ5NwpGu1a/SvgRtJ50gp1PA84hAEtGPpAyguJ8dXAbSkvZAEozLEhcBge5nAGixyAO7F6zfJmUzkyQ1h2yUCcKR9IeaFFtvuBi8O5LoUMTiJ9l2anfOSt/ifW+SRVvQ793X2BP2EA9dxdoPND90Q7Crsgdoq/PQPYDK8R7QweedJ/i5VHUJH9tpEH/89YTLqv8WgX6PyQIGtHYRfukeKAWwEHNc45zqCQEN6Lpbul2jcg238MVpa0r2swPojyo7mjcIz8K9sJ1e71GtFOWyir42vAZ0gX6tAYfS3WyKJvIu0CnR8S498Aq3vO5cwI5sUcheVFe5jDaQNldfwNcDuxsXGbNJspv4E+hjlcoPNDG1YewtLtoBsLhTLSHfAwh9Me8lZvA/6edDNOhTpOBR5Hn7xoH0B5oqfvuT3vc0cPkuPCsSvX7XQbZXWcAfyQNAuGclA2xGqG9MWLdoHOE3kAq8KxK0Ine1oBrIUXT3LaZQJbMHwovG/bk9aD4bnAE+mDF+0CnSfNFlj30J2FQl3nE7Aa0c36Io4zSORFXwx8hDQ7DJVJsi7wd/TBi3aBzhMZ1q3ANeF1FwQaYqui48P7rnj/TveRx/oW4GbSiLSclL540S7Q+dK1FliiGebwGtFOm8hjvRv4P6TJjW5WePzrpf59F+h86W2B1RVPVB7EU4Dd8BrRTrtoBncGVtw/RW60nKvnAjuyhDHgAydf5DHLg+5SLFcbCI4J793OnDZRRsUbGu/b9KSbGR2vZgmxaB84+SKDupJY2a4rcWgZo9LtuhKeccpAXvT3sV2GKWPRL8FKIGhDzYL/J06eaFp0D3BZONcVoZNd7Y9N8bxGtJOKf8TS7lJ50Ztjm1cWFebwQZM3uj8qPdolD3ocWB84Eq8R7bSPSn9eAnyOtGl3r8AWDRfsRfugyZsut8ACu/7j8VZYThoU+30bVmO97f0EeijsBDyTRXjRLtB5I2O6DOto3IUWWGIYGxxPB7ZgkTE4x1kCCq1dC5xO2rTPV7GIB4QLdN7I61yNVbfrEhoMm2GtsKBbmShOGciLfi9wH+07Ofp7BwJPY4FdV1yg82cYW+S4KLzvUqhA7a9OaLx3nDaRF3091g08RTlSZZW8bKH/oQt0/nSxBZZQjegjsHZAXiPaSYG86PeQJhYtj/lZwNZEwZ4TF+j86WILLCFvZVtsigfdun6nDJpe9CdpPxatv7cJ8JxwzgW6ECTQlwB/oDuV7YTXiHZyQF70+4Dfk27B/cXYGJ7XbNIFOn9kRLcAV/Wc6wKysWOAdbA+iy7STtvIi/41cCbtx6L1QNgX2I95pty5QOfPJFbX4hHihpUuLRTK498ZWNY45zgpGAI+QJqGzPKaXzTf/8AHSjeQEZ0762/liwzzhLl+0XEGiOzwQuC/aN+Llt6ehBVSmjPM4QLdLVaFY9fyiXtbYfmmFScVsrt/7XnfBoo9PxpYHs7NOpZdoLuBnvKXA3eSphD5UtBUcg+sy0Tf2tI7zgKR13o25vC07UVr3D675/20uEB3Awnab4Grw7kuxaEh9ow7Nrx323NSoSL+H6N9Z0ce83KsDOmsYQ4fJN1B90px6C550BCNcGU4eissJxVybs7EZqRtptw1SyAcFd7PGOZwge4OErhVPe+7gmxtX2BXvBWWkw7Vw7gD+FI417bDMAmczByVHn2AdIcut8ACe6CMYbnQWiBx+3NSMgR8mvYbSqjS4+HM0W3FB0h30BTsauDG8LprcWgZ4fHh2LXrd8pBHvPPsbS7Ydrzoptbvw9lljCHC3R3UEjgAeCKxrkuIXs7EKvP4a2wnJQo9vyFBH+7WelRr9fAB0e30P06Lxy7JtBKadoYa4UFboNOOjSDOwurc9PmYqHCHIcCGzFDNocPjm4h4/llOHZtoRBsUEziHb+d9DTrc/yoca4N1A5re+CpjXNr/JLTHSTQv6L9J36/kOdwJLApvqvQSYs08MwEf1sPg6PD0T3ojqMbei1wQ3jdRYFWO/pnMEceqOMMGI2pb9N+Syzp7xHEhcOh6X7B6Q4jWLqaWmB1TaAhDoqVzLJA4jgtoBncTcDPGufaQGK8B7AL05RAcIHuHrpn6rDSRXHTZzgK2ABvheWkRa3ZvtHy35XXvDZwUDg3RZNdoLuHnu7a8t3F8ICKJ+2IFS/XOcdJgRauz8Zmp22GOfR3Du95D/ig6CK6gVdgOdFdq2wntCngxKRX4TgxtHAVsZRCm9kcAAcA69KzaO4C3T10A2/Dsjl0rmvI9o7GOsZ4mMNJxSTmNU8AP2icawPNJnci1qhxge44KpfY5YVCef5PAJ4Szrk9OqnQGPpuOLZpixOYk3JA79/2AdFttFDYRc9TCyTDWKcVnXOcFGgWej5Wd73NfoX6Owf0vHeB7ii6gRfQ7XoWuu4TiILtOClQrZs7SReHXkYs2jTU/AenW8hwrsRq2nZ1oVDXvQewG14j2kmLbE/bvtss4g/wOGzr9x/P+WDoJlpIuBsTaejmQqGKJ60DHBPOuU06qZAgqxhZWymsGgfrEddjXKA7joxHhZO66EE38VZYTmrk5Kyi/RRW/e19wtEFuhAuDseuLrDJBp+GtaP3MIeTkiHgdtqvua7xKw96AnwgdJnmqrN6rHURLQ6uj2VzDOF26aRB+dDjwGXhXNt1OZ5EY8OKD4Tuoif7r8MPdDMO3UTFk7r+OZzuc2E4tjUz1d95dPgBF+hOo6f9H4jTsa4Km+zwGcDWeI1oJx1yfFII9ATmPe+icy7Q3UbGc07Sq1g6CnNsiteIdtIigb4R+D1pNqzsGY4u0B2nNy2o6/dzziaajjNgNAu9GbglvG5boPfQia4P6NpptsBq+2nfb9QK63BmaaLpOC0wDDwEXB/et53JsXM4jrtAdxs97a/H2mBBdwVaMbjtgIPDObdPJwUSytUt/13Z+87YppVJHwDdR2USV4X3XRVoWLPjt+OkQAJ9XTi2Paa2ArYB91BKQMakOHSXBVphjuXY9m/fVeik5MZwbDPUNgmsBewALtAlIEFW6dEuZz8ohr4rsRVWlz+P0000prRI2JZOKswH1g7OBboAmpXt7qG7le2EFgdVPMkXCp220fi5jZiT33Ymx2PBBboEVNnut8Cl4VxXN6xAtMmV4fUYLtJOu0gk78CyOdpEtu4hjoJQF2IVTuqyB60wx+40EvbTXY5TMQ9is9IUPAZcoEtBgqwdhV0XtHHsoaNWWG6nTgoeAu4Nr9vOhd4aGHbDLwMZz0VYSKDr91XXfzzeCstJx8PA/S3/TQn0o4CNuz6QHUMCvRpb2GiuBncRGem+WNK+14h22kTrOpNEgW47bLgJsJkbfRnIoO4j1rHtchxaXvM6eI1oJw1yEh5I9Pc3xD3oolC+cAkbVpoch9eIdtLR9nqOPPdRYAsX6PJYFY5dv7e6/oOx+hxeI9qpjS27PoidSLMF1iN0u7IdxDDHRsBheI1opx40bjd3gS4H3dSbgGt6znWdk/Aa0U59uAddEGqB9TDtN7wcFM1WWJviNaKdOpAjsqELdFn0tsDqupgpXXArTKSh+7F1x5kvvkhYGHryXhCOXRdoiDWiV6a+EKdKUmrkiAt0WUigL8e2qHZ9oRCm1oheDw9zOIOnudFr08a5Nv8++CJhcSgV7TeUs1A4jH2uHYADGuccZ9CMYJulUjHqhl4euqcXhmPXFwohfga1wnIP2mmD9YgedAq8J2GB9C4UloDs9BhiKywXaWfQrIPVxIA09ua1OApE3uZF4VjC5g7F0nfDakR78SRnkPwxBgysn/A61nYjLw/FnK/EOkJ0vQWWkNesbA73oJ1BIdvakujgpLA3D3EUiLzL31FGCyyhAbIC+3xeI9oZFLK17cMxma25QJeJ7qvCHCV40PpMy7BQh4c5nEHz6HBM5uC4gZeJBPkX4VhCOGAI6xYzChwdzrn9OoNA42fncEw2ftzAy0QGdhllVLYTGignhGMJoRsnPzRWHheOqQR6yAW6TGRg1wC3UM5Coex1P2BHTKDdhp1+ol2Ea5Peg77TjbtMFJ99kLhhpQSBVo3oDYAjwjm3YaefNBcIt+051zYPuXGXS++OwhIEWkziYQ5nMEiMd8IcgZSdfHyrd8H0VrYr5V6reNIzsI0E3grL6Seypb3DMYVjo795dymD1lkT3eRVWKijpIXCcaxGwpHhXAm7JZ080BjZr+d9Ch50gS4XGdYtlFPZTuhzHNfz3nGWgh7+o8Be4VxKjbzfBbpc1AJrDLg4nCslXiuP+QhgY7x4ktMfmvHnx/ecS4GHOAqntBZYQqlQ2wEHhnNuy85SkQ3tD6xFuge//qan2RWOpv7K5Cjpfms2cHw4lvLwcdKh8XJwz/tU3FXSgHXWRCL2K+BOprby6Tqy3eVY3d4xXKSdpTGOec4S6FT6KDu+wwW6bCaxm30HsDrxtfQb7Y7clbji7vbsLBbZzm7YFm+NnZTc7gZdPrrH54djKR60VtwBjm2cc5zF0JyRpYw/68Hwe+BeF+jykZGd2/O+BGS/x2KZHV4j2lksclxWhGPqcXIPnsVRBSW2wBLafLM7sAdeI9pZHOocvyPps4L+uIsQXySsAt3wq4Gbe86VgDYWHBPeu007C6U5E1uftHn1TYH2YkkVIK/yfspqgSVkw0q38zCHs1A0Hk5OehVTuQnc26gF3edV4ViSBy1P5ylYRoeHOZyFoPDGrsBBpLcfjc3rwA25FnTTS9tRCLEV1rrAUeGc27UzX2QrpwDrkU/ZgOvBDbkWmi2wHsIWCkv0or1GtLMQmsWRXhjOpdZE/f0bm2+cspEYX0u48ZQl0LLjA7EuGF4j2pkPsptDySMLSH9/AhfoqtCNf4RYwL8kgZYntDFW4W6IstIJncExCbw8vM5l5nUfHuKojpJbYDVZiX22Uj+f0x/kqe5CzABK/VCXzd6Apdm5QFdEbwus1MbYb2TLRwCbkM9ij5MnquXyZ9ji4FjaywHiGL2G0LHeBboeNH27GHiAaKCloEp9W2D9Cj3M4cyEvOctMIFOHXsWGo9XheNIDhfltMvtwBXhdUkCDfHznIiHOZyZkXNyKibSE+Qh0JrxaUPZZA4X5bTDJJZONEF5LbCEDPwIYAM8zOGsiWZajwJeTR5lRYX0+LJwnHCBrouSN6zA1KI3XiPamQ7tAXg58Gjy8Z71oLiNkMGBe9DVIYFeRT5xt36jWYE2rZT2EHIWzzA2q3oU8Fry8p6bW7zV/cgFujJkBFdiXVZKWyiE+NA5GgvpeCssR8jeXwNsTz7eM8zQPzSXi3PaQR7D7zCR1rmSUI3o3bACSjrn1I3CX9sBryMv7xniOJzSWMMNtz50z2UIpS0Ugk1jh8mnO4aTHnnPb8Ly5HPznkfD8ZJwbgLyuUCnPSRW5/e8LwnZ9Uqm9i506kTt0JYBLyMvcW5yCzGDYxLyvEhnsMhjXoUZQWmV7SA+dPbGQh2lLog682cYeD/RU83JMdGYvBBrFqswnRtthUiMf00jnSfRtQwK1YhemxjmcFuvE3nPpwIHh9e57TDtjT//0VbdaOtDXvODxHhXaQIN0UNaGY4lxtqd2WkuDL6DfMvQSod/HI6Tvf/g1IWMtMTSo0K2fQCwA/nGHZ3BoVDBvwBbkmeoS9f0W6bZ4ZvbxTrt0LujsEQ70OLgelgrrCHK/JzO9IxgYa6TgReE17mFNiCK8UWYSP8x/gxusLUiA7iCnkWJQlGNaA9z1IFCG9sAHyJPz1lo3P0oHKdcZ64X7QwWCdX12GIhlCnQsu9DgK3wMEctyOH4CLEFWq73XV79f4fjlHGY60U7g0d1CbS1tETvUpXLNsVqROucUy7a3v+XwDPJN7QBcdHyJmbYOOYCXS+9LbBKZQLzSk4K70ucKTiG4s57A+/G7n2u4gxRjH+KhRrX2JPgAl0vMoTzwjFnQ14Kw5iXchiwEfmmWjlLQ1u5HwV8Hli3cT5XdG3f6Xn/R1yg60VP78uwBpUlVraDqbmwBzXOOWWh+/xR4InEeiy5ooXLB4Dvh3NrhBlz/gDOYNF217uAy8O5EuPQEMMcK+f6RaeTjGKC/AbgOeQddxaayV2ILdZrvWQKLtB1o5iXEuRL9KAhhjmOxqa+HuYoBy0Kngi8nTy3ck+HxtrXw3Haa3aBrpvSW2AJpV3tglU0yzkv1pk/WhTcB/h0OKeHce7I61f8eVrnyI20bmQUFxFjdqV60WogqzBHFwaxMzNKE90eOAvYmPyq1M2Eyt+uwmav04Y3wAW6diTGVwG30g3jXiz6bMcQPS+nm8iR2Aj4CrAz+S8KNtG4+ypzlPztygdyBoOm+vdj276h3IVC2fqewJN6zjndQdlGI8CZwL50Y1GwyQg2zr4a3s845txAHXmWvwzHUkMcqhE9TAxzuP13i2bBqzOwRd8xLJ7bFRRqOwe4lFnCG+AG6kSBntJNuFD0WY8l5s063UDiPA6cTqxQ1yVxhugAfYl57HQseTA680MidTHRwyzVi5a974tldORcRMeJDBHLx74HeCndFedRbFv3l8O5WZ0EN05HYnwdcE3PudLQIF8XqxENPgZyR+I8gdXXeD3dFGeIG6Z+iFWRnHMW58bpaMHlYWJH4ZKn/nr4eCus/JE+TWClQ/+a7oqzGMLi53o9Ky7QDkRDOXfW3yoDxfwOxupzeJgjT5re5aeBV9JtcVa8+Wbi5pQ5nQM3TAdm6SpcIApzbAQcjrfCyhGloa0H/AfwYrotzhDF+AvAPcyS+9zEDdOBqRtW7qXshUIxCZyAt8LKDW2B3hz4BlZjo+viDHFzlLakz2t8uUA7MLWzQ+kLhRDrNRyKdVvx4kl5oMJHuwA/wGp4lyDO2tr9Y+bY2t2LC7Qj5DVfEN6X7FVqgGxJbIXlYyEtEudDMSHbExO2roszxEyU08L7eduaG6UjejeslI4eQMclvQpnOPyMAacC/4U1eu1K2dC50CL0tVhp0Xl7z+AC7URkNGqBNUr5YQ6AFdhilLbgOu2hxcAJ4B3YDsG1yL+X4ELQGDqdGfoOzoYLtCOaC4V3pLyQllBI5zHA/o1zTjtoMXAb4D+Bvw/vS6rVrc9yL/DJcG5BocNSvghn6aiW7t2U3wJLaPHm+KRXURfNkMZBWEfr44gV6UqaxWhW9lngN8QZw7xJKdDKPx3BnqYj4Wd4hp+Rxu/q9xV8d/qDpl+rwvuSQxwwNcyxNuU/kFLTDGm8FmuWqlrOJSwG9jICPAR8KLxf8Hhq80uRIGujwCT9EwDFSz2ndWnU0gJLKMzxBGAvLP4+QvSsnf7QrES3DfCvwCnh30qKNzfRIufXsRnpoqonDlqgh5j61Gwa/qOAx2JP0MdgrWs2B7ZiTc9eU+87gRux6cK1wGosXtrsjiGPWw8BZ/7o+7oYeIT44CtZqOW9rcQEuuTPmgI98Max7/jDwA7EDiilhlnliL6j8X7BDEqgm56yxHMbrGHn4cDemMeyOUu7Qfdii1oXAN/Dis5fT3xSacruXvX8kECvxmoGPJbyN3HI/o4F/hn3nvtF02veCHgb8Orwb6Wk0M2EPt+3MG3S97BghpYv272P1zVFmMF2aa0ATgYOwTYG9CLvGuYWAgmIPPNe7gV+gdVa/Trmaeu69Lec2dFU7BuYaJU+mMQjmNNwBV7Mf6k0w0RHAu8Hdid+p6V6zUJOzSHYpptFh8369UU1QxnjwB7A+7CWLp/D4k1bhn8fY2oMepipC3+z/TR/rxlz1v9zY2A58G/AJcBHgacQHwKlrRIPAtnEL8KxhjDRGJZ/uyK8L11ABkUzvLgJJsxnY+I8RtkhDaHQzdmYOC/ae4b+fFkSy3FgHyzf7zxslXY7YvypKcb9yMDQf9/8f+o6xoHNgJdjC15fxMIruo4aPMLFIkG+KBxLH1AQ7fDEcHTveWEMYWNQjtApmAa8huhElZilMR2KIPxz4/2iWcrgk9c8DmyBPS1/ibWjWYepYtiW56praor1CPCccG0fwjx5nXdvek0kThdhKUI1VLZrtsLaEa8RvRA01saAx2Odts/ECh4pD7iW71Le81eBn7FE7xkW/8Vp0I4DzwXOx56WazNVmFMKYDNOLUH+S+xaT6G8XUv95mZsARbKF2h5PRvirbDmi8a3QotvxuqJn8LUkGJNDGGdid5Gn/ZoLMYIFWveAPg4VoB6B+wJmoMwT4cMZQxL6TsTS/dZlzoNaTZ0D8ewNQSoa8rvrbBmpzeN9fnYesU/YUJdevrcTOhzfw4rOLZk7xkW/iVq//wTgP8GXhbeK8aUmzD3ojjZOPAq4LuYYJe6k2mx6D7WsmEF4lh4Bpb+WXp64ULRbl55x8/AUls/BzyRutd3tFfgPiz2PESfZp0LEWjVa306tjq5jLh/vktPSxmaagH8CHgyZRQG7xcyLpUerUGoVAZyU+AIZk7lrI2mMCsR4EzMQTscz5CC6D1/CLiOPqZpzldYJc4rsHqtWmjrsqBpNvBY7DPtS3zg1I4E+krgd9SxUAhTa0T3sxRBF+kV5j2wDK1fYHFmrUHVGM5ooofTTcC76HMO/Xy+WHmbRwNnYXHbUjYvNLNQvoV50qV8tqWg6f2txIXCGmKyuu9HEuOptXmFmhE3hfnDWLjrpcQMLZ9hGApv/BNWjqJv4Q2YW6AlYMuwac36lLeo1hTpr2EetTyDmtHnPz8ca/AmFebYDjgwnKvBDiS2ysqYwJyV07F85lcRmxrUGmeeDjlzP8dmF33fgTqb8WkVcnts6/RGlCtcmiU8GvgS9iCC+rynJvrsF/S8Lx0NsJWz/lZZKFwxiTVqPQsT5lNZc09DLXYwF3JYJoDXE+2mr47MTGKrHL61sFVaVZ8q+cmpOPsybEpX2kxhocjgJNALatXTYTQmjmbqdL5E9LnWwjZzfQ+r0XwyU1PpXJjXRPrwcSwuv+Bi/PNhJoHWzXkzlk5Ty+KZRPqlwJ9Sz+eejmZlu1tSXkjLaEF0V2zhWOdKQ4K7LlZY7ItYVkbTm3Zhnh7tNL0V+AcGuIg+neEpJnsg8AbK95x70ZPwPcRymyUO0LnQLsv7sMJTUMdCIcQNBgpzlChSWszaGZstqOhYMx7tTI8WBv8W+C0L7NS9EKYrjD+JPVVPI5YPrelm6TvYBKvIV3rB+tmQfawKxxpCHDC1RnRfdoRlzoPEtDpndpq1nj/DgDvw9Aq0ViFfhaXXlLooOBf60k+irprIvdTWAkvoIf0kYE/Kr9lS8mfrJ80dg39Fn1PqpmO45/UEsDXwRuqd2vfyNqwIVI2etIzvEuAP1LNQqHSzUWz6Dz4WnOiw/iPWcm/gjR2aRqenwWuwWgQ1ClITedFPxir21fjAkhhfj+2Uap4rnd4a0aWHOZzZ0QP7B1jT24FkbfQy3DjKe34F5U/pFsIk8L+xVKTaCujIDh7CGsnqXA3I/pdhtY19TNSLnNV7sCYgk42fgdIU6EngJVgnktqEaCY0pd8LqxNc4yDV51UcuhaBHsKyGtbBW2HVjmbPrweuoSXvGaY2eV0Xy/2tPbTRi27EX4RjLQIl9HlXhWNNi6UaB14jul6UIPAlbOv7QLM2elElqkmsA+0TqNNLnA150UdiOaO1xaKbLbB+Twsr1xmh+3wgsC313fva0f2+AXglCbq9N43t+Y2LciJKQl8P2wILdQ7SO4ArwutaBLrZ0kk1on12WQeKMQ9hjUm0IaVV21cS/obEOFtNU9iFcjwD3DWUKZPE2tm17SiEOFCPp54HkxNDG2/FOi+1GtoQzSnc1vji4EzoofVU6u76/PNwrMlGtE5zGLaAXnLxJMdQSt3ZWJ3n1hYFe5HIHBqONXlGC2UCW0h9enhfk0DLc7yY+haRFXfckjrvfW00O6T8CWbvEySaPTU96OZ7Z0308NIgrWm6q89+JRaLbn2xJDEaoMenvhBnoCicNYaJ860kbvc2DGyDdeWFujyjhaKH137hWNPOMnnNd1HfQiHEMMcRwAZ4mKNUFHf+a2zHoNZekjEMPB7YKrx3o5sZfTc7Yy2RoK4Zh+Lwq8KxNoGewMrPPrVxzimHMUyQPwF8kFgbPinDWLUuqGvKuhiUYrMxsFPjXG3UVtlO1NgKqxYkzj/GKnkmydiYjmFg9/C6Jo9osWiQ7pL0KtKgz76KOtuB6YF0DFaXxcMcZTCBifN1WNuvh2mpzsZ8GMbSxsCNbSFIoGv6zmSw1wI3htc1zbq0WLQbsE84V9P9LxGlFd8PnIItCiZLqZsOLRI680MitUPSq0iDSgA8iG371rla0K7CIcyL1jmnmzS95BcD55PBomAvw/gC4WLYPPUFJEILY7WVHhX6/CvJzNNyFoQa445gnVG+QiaLgr0MY2lDzvzQQ2yTcMzqadsCEuRfhGNtD3UtFO+NZT95YbFuop2CbwU+QqbiDGZcm4bXtQ02Z+FIoC8HHqCeFlhCYY61sV6V4ALdNZSx8RHgTWQszuDGtVD0EFufKE41Pdi0qHIjcaGwJoGGeL8l0B7m6A4S5y8Cf0kHOra7QC+OmkS5l2HM0M8P72sTaI2ZA7DF4loLZ3WNRzBx/hbwQmJWTtb2W1tNhaWim/kAcUU/6xs8APRwqlWgFeZYD2uD5jWi82cMy13/LpbrLM3L3naHsfoK0IGLzYiaB2TNLbB6OYEOeGGVo7DG97AO7ffToZruw9gFOwvj3nCscWorw74U63Jc4yxC9/1gLE3V66jnSa84/56ORQ2GsfKRUN8gWwz6jvSd1Tooh7AWQL8K7ztj8H1CYY7NiOVna55J5IhizhLnB+iYOINd8C3htQv03EiQb5n1t8pmkpjBUuOOwiaT2ODXaycPFHP+HnASHRVnsIv+deqL6CDXhmOtg7L2DSswtUb0hnjxpFxQWOM/iDHnTooz2IVfHl67cc2NvqPVSa8iHy6h3jQzLTRth4c5ckCdUEaBLwDPpsOesxjGFnt8kWNutK33ftyDlsFfhYV7OrMq3mfUCkubVmq1h9Qok2YU+DDwfKLj0Gm7HMYG2a3UuRq/EPTdXA/cEF53+uYvAe2gvI+4UFij7SjMsQJYBw9zpEBjcBh4M1b8aLjn3zrLMLYarzBH5z/QANF3cwFxoaxm9PnPC8daBXoCa4O2b+Oc0w7jxHvwCuAtxAXsIuxRxvSTcCziQw0IeUY/6XlfOxeEY63CpKm0WmG5XbTDGCbGd2Hf/UexEIfCTkWgQfXDcKzdK5wJecxjwI/CudpnG/r8F2HfS9L29AnRGFpBLPjuIj1YtBh4BXA48G1iVbqibFDG9UssrlrrYs9cNMMbV+HfE8SBcB11L5pqDO2F9ff0GtGDQ4X2R7G6GodiDkLWJUOXwjD24f4AfDOcq114pkPC81XqbJg6HZpVPIxlAkG9tqMZhLfCGhzKNBsBPohlztxGnNkWSXNa+sVwdPFZEwnRV8L7WoWoFwnRhUmvIj29NaKzrjHcQfQAfBD4C+A1jXNFf9f6gEPAT3FPaDpkAD/Fsl06n1vZR3p3FNY6tZejsx/W8d3DHP2hufnkauBI4DSiE1n8OJQRjWDFRT6O50P3onq/p4X3PvAispMrsAp/tS4Uak1iXWB5OOd2sjQU0lAHlAOBn2FaNU4ldiYjkhf9GSyu416iISNZjcWfVcXMMfT9/IZY06WKgTMLKp7k42fxKHzxMPB64HnYfg2JczVIoDUluwvLJ3Qv2tCOuXdjC6m1NUmdD3qYq8NKrcLUbIW1LV4+YTFMhJ9R4DIsS+N9xB2bVYkzTJ2GyaA+iG39rt2L1gaE1djMokoDmQcSoQtm/a3ykX1sjFW4U8aBMz+0K3AYcxIPAn5OgZtPFkJToOVF/xZ4O57rK+/5TcRODFUayRzoO5FA1yxK+i68Fdb8kdc8gu3FOBnbtn0PhafQzYfehQx5jadhqVPaGVUbMpgfYgsU1cW+FoAe4r8C7qTu8JgeTocAm+C7CudCseZhrEToAVgd5xF8xgqsKdAaWI9gVaHGes7XgD7rg8CrqHh6tQCGgLvxolsSla2w+Cl4Nsd0aEyNYjtRn4OVCP0NlWVpzMV0xiPv8WfAv1Cf96hY2Bsxr3CEegVnPjQr+13QOFcr+uzHJb2KPNFWbS36fRTYHziT6EnXpDVzMtPTXSL9Jqw4ULF73XtQUvzXgffj4jxfJErnhmPN03qNqeXAeniYQ+h7GMHCp0dhsWZt11Ys2mkwk0BrgWMMeAFwM3E1tVRUhOUq4CXERcGavcH5ou/oEuqubAfxs+8APK1xrlYUzhjBwmBvxGLN38VjzXMym+HIi74ZeC7W36vUzI5x7LPeCTwT+B3lftZBIDG+GriJuhcKIQrOCeFYowc9wdRwxr9jTQ3eATyEx5rnxVxPdnmVP8U8aaWelSRcEucHsEaTl1Nf3H2pKEXzQeJCYc0DT+PqaGAt6gpzNOPMI1iI9FDgxcA1mJ641zxP5jP1Ulz2a8ALiV9+CV+wxPl+bIvuD6g3tXCpyJbOCcfaBXoS2A3Yh+jYlIxCooozXwL8CSbO/01cBCyuqP4gmW9srNnO/ERM0LqeRK6WObdjK+7fo57F0EGgQbcqHGuOu0J0ZFSCtNTvQx6zChvdBLwWy874DDH+7IuAi2AhRiOR/ia2lfVautlmRrGxUewpfyh1ZaoMCtnARVgefc0LhTC1RnSJU3qNI3nMN2MLgHsDH8B23/oi4BJZ6FNdXuc5WPm/r9GtmJIyDEaAz2I7vpTr7OK8NCTGN2LlR5vnakRj68nAEymnRnRz8W8EuAVLx30KtgB4F1OFuWYbWDKLMRjFbW/Dwh2vB+4jTmNyFGpd0yhWCOqlwIuwbI1S4ump0VR2HKtEBnVPaYewh/5adL9GtMIYTWFejY39vYC3YqFCF+Y+s1iD0dRmCCsH+DRsD71unoQ65U2SUUk4JoEzsGs9g5j+U7OI9BtN689LehX5oO9DNaK75gj0Lvxpk8mfA8uwsa86zS7MA2ApT3Rt4hjBwgQnAyuJK7a6aWO0V8+i+aSXUQ1hcfNDMc/5BuJDxI2pv+j7VCZHVz3GfqHPvx+wI93I5ugdQ6Ph3HeAZ2EOzsewDjrN8KaPpQHQjwHUrOP6DUwIjw2vH8FuorzVsfD7/fJaJ4neeu+T/j7g81ic+ThsIXAED2kMEt3X1diuMV8oNFvbAFtYh/weWhpDE6w5hm4FPoSJ8grgy9iYbjpfNd/fgTPap/+PBqY802+Fnz2xXYgnAbtP8/cmGz/yLKbzMCZ7jkM9P2IM+CW2eHkmsQ1Ts7WXMzh0H2/FdhXuSyxhWyv6/CuB08lP0EaxmiEQ79NPsEX0s4A7wrkhYhMPH0ct0S+BFrpxivleEn7+CUvYPyT87AbsRJwizcVMv/N7TIQvxkIrPybuZNN1NK/LGTyaoVyITe01e6qVtcLxaGBTYhmB1EKtv38rcCmwIeYhn0ns0g5xLLswJ2Bo+bLdB/n/b+4earIhsGv42ROLz20LbI49zTcjescPYUb9IJY5cjs2hb4EE+drsOaSTVTYyRcA20eZHIcBnwDWT3s5yZkA1sHK9z4bs2dIL9AQHxSbhePvGv+mHbU5XGe1/A+4C+0o+apDIwAAAABJRU5ErkJggg==";
 const DATA = {"cats":[{"id":"red","n":"Canastos redondos","s":"Redondos","colors":[{"n":"Algodón crudo","f":"crudo","c":"#E6DBC5"},{"n":"Yute","f":"yute","c":"#B79A63"},{"n":"Yute zigzag crudo","f":"zz","a":"#EDE6D4","b":"#B79A6B","p":"zz"},{"n":"Yute zigzag negro","f":"zz","a":"#B49A6E","b":"#2B2620","p":"zz"},{"n":"Mostaza","f":"color","c":"#C79A3B"},{"n":"Camel","f":"color","c":"#C6A579"},{"n":"Visón","f":"color","c":"#A88C74"},{"n":"Tostado","f":"color","c":"#A97E52"},{"n":"Verde seco","f":"color","c":"#8A8B6C"},{"n":"Gris","f":"color","c":"#8C8880"},{"n":"Ladrillo","f":"color","c":"#9E4A34"},{"n":"Azulino","f":"color","c":"#6E8196"},{"n":"Azul marino","f":"color","c":"#2A3550"},{"n":"Verde inglés","f":"color","c":"#2F4A3F"},{"n":"Bordo","f":"color","c":"#5C2733"},{"n":"Chocolate","f":"color","c":"#4B3626"},{"n":"Negro","f":"color","c":"#211E1B"},{"n":"Combinado crudo con beige","f":"color","a":"#ECE5D4","b":"#C9A96F","p":"br"},{"n":"Combinado crudo con gris","f":"color","a":"#E9E2D3","b":"#949490","p":"br"},{"n":"Combinado beige con crudo","f":"color","a":"#C6A067","b":"#EDE6D3","p":"br"},{"n":"Combinado gris con crudo","f":"color","a":"#97968B","b":"#E6DFCD","p":"br"},{"n":"Melange","f":"color","a":"#DEDDD5","b":"#8C939C","p":"ml"}],"sizes":[{"k":"Mini","d":"12 × 4 cm"},{"k":"S","d":"15 × 6 cm"},{"k":"M","d":"18 × 8 cm"},{"k":"L","d":"20 × 9 cm"},{"k":"XL","d":"24 × 10 cm"}],"extras":[{"size":"Mini sint.","t":"Sintético · Mini","d":"12 × 4 cm","colors":[{"n":"Sintético crudo","f":"sint","c":"#E7DECB"},{"n":"Blanco","f":"sint","c":"#F4F1EA"},{"n":"Rosa","f":"sint","c":"#D9A7B0"},{"n":"Gris perla","f":"sint","c":"#B9B7B0"},{"n":"Sambayón","f":"sint","c":"#D9C9A3"},{"n":"Habano","f":"sint","c":"#C79E6E"},{"n":"Salmón","f":"sint","c":"#D98C6A"},{"n":"Cobre y crudo zigzag","f":"sint","a":"#E9DFC9","b":"#A9743F","p":"zz"},{"n":"Cobre","f":"sint","c":"#B26B3F"},{"n":"Verde esmeralda","f":"sint","c":"#1F6B57"},{"n":"Verde militar","f":"sint","c":"#4B5236"},{"n":"Rojo","f":"sint","c":"#9E2B25"},{"n":"Azul marino","f":"sint","c":"#2A3550"},{"n":"Chocolate","f":"sint","c":"#4B3626"},{"n":"Bordo","f":"sint","c":"#5C2733"},{"n":"Negro","f":"sint","c":"#211E1B"}]}],"price":{"Mini":{"crudo":4000,"color":4000,"zz":4000,"yute":4000,"sint":3500},"S":{"crudo":6000,"color":6000,"zz":7000,"yute":8000},"M":{"crudo":7000,"color":9000,"zz":9000,"yute":10000},"L":{"crudo":10000,"color":13000,"zz":13000,"yute":14000},"XL":{"crudo":13000,"color":17000,"zz":17000,"yute":18000},"Mini sint.":{"crudo":0,"color":0,"zz":0,"yute":0,"sint":3500}}},{"id":"ova","n":"Canastos ovalados","s":"Ovalados","colors":[{"n":"Algodón crudo","f":"crudo","c":"#E6DBC5"},{"n":"Yute","f":"yute","c":"#B79A63"},{"n":"Yute zigzag crudo","f":"zz","a":"#EDE6D4","b":"#B79A6B","p":"zz"},{"n":"Yute zigzag negro","f":"zz","a":"#B49A6E","b":"#2B2620","p":"zz"},{"n":"Mostaza","f":"color","c":"#C79A3B"},{"n":"Camel","f":"color","c":"#C6A579"},{"n":"Visón","f":"color","c":"#A88C74"},{"n":"Tostado","f":"color","c":"#A97E52"},{"n":"Verde seco","f":"color","c":"#8A8B6C"},{"n":"Gris","f":"color","c":"#8C8880"},{"n":"Ladrillo","f":"color","c":"#9E4A34"},{"n":"Azulino","f":"color","c":"#6E8196"},{"n":"Azul marino","f":"color","c":"#2A3550"},{"n":"Verde inglés","f":"color","c":"#2F4A3F"},{"n":"Bordo","f":"color","c":"#5C2733"},{"n":"Chocolate","f":"color","c":"#4B3626"},{"n":"Negro","f":"color","c":"#211E1B"},{"n":"Combinado crudo con beige","f":"color","a":"#ECE5D4","b":"#C9A96F","p":"br"},{"n":"Combinado crudo con gris","f":"color","a":"#E9E2D3","b":"#949490","p":"br"},{"n":"Combinado beige con crudo","f":"color","a":"#C6A067","b":"#EDE6D3","p":"br"},{"n":"Combinado gris con crudo","f":"color","a":"#97968B","b":"#E6DFCD","p":"br"},{"n":"Melange","f":"color","a":"#DEDDD5","b":"#8C939C","p":"ml"}],"sizes":[{"k":"S","d":"21×12 · 6 cm"},{"k":"M","d":"23×13 · 7 cm"},{"k":"L","d":"25×15 · 8 cm"},{"k":"XL","d":"27×17 · 8 cm"}],"price":{"S":{"crudo":8000,"color":10000,"zz":10000,"yute":11000},"M":{"crudo":10000,"color":12000,"zz":12000,"yute":13000},"L":{"crudo":13000,"color":16000,"zz":16000,"yute":17000},"XL":{"crudo":15000,"color":19000,"zz":19000,"yute":20000}}},{"id":"gra","n":"Canastos grandes","s":"Grandes","colors":[{"n":"Algodón crudo","f":"crudo","c":"#E6DBC5"},{"n":"Yute","f":"yute","c":"#B79A63"},{"n":"Yute zigzag crudo","f":"zz","a":"#EDE6D4","b":"#B79A6B","p":"zz"},{"n":"Yute zigzag negro","f":"zz","a":"#B49A6E","b":"#2B2620","p":"zz"},{"n":"Algodón negro","f":"color","c":"#211E1B"}],"sizes":[{"k":"S","d":"20 × 15 cm"},{"k":"M","d":"25 × 20 cm"},{"k":"L","d":"30 × 25 cm"},{"k":"XL","d":"35 × 30 cm"}],"price":{"S":{"crudo":22000,"color":25000,"zz":25000,"yute":26000},"M":{"crudo":26000,"color":31000,"zz":31000,"yute":32000},"L":{"crudo":35000,"color":39000,"zz":39000,"yute":42000},"XL":{"crudo":52000,"color":0,"zz":0,"yute":58000}}},{"id":"ban","n":"Bandejas","s":"Bandejas","colors":[{"n":"Algodón crudo","f":"crudo","c":"#E6DBC5"},{"n":"Yute","f":"yute","c":"#B79A63"},{"n":"Yute zigzag crudo","f":"zz","a":"#EDE6D4","b":"#B79A6B","p":"zz"},{"n":"Yute zigzag negro","f":"zz","a":"#B49A6E","b":"#2B2620","p":"zz"},{"n":"Algodón negro","f":"color","c":"#211E1B"}],"sizes":[{"k":"S","d":"20 × 4 cm"},{"k":"M","d":"25 × 4 cm"},{"k":"L","d":"30 × 4 cm"}],"price":{"S":{"crudo":8000,"color":10000,"zz":10000,"yute":11000},"M":{"crudo":11000,"color":13000,"zz":13000,"yute":14000},"L":{"crudo":14000,"color":16000,"zz":16000,"yute":17000}}},{"id":"cen","n":"Centros de mesa","s":"Centros","colors":[{"n":"Algodón crudo","f":"crudo","c":"#E6DBC5"},{"n":"Yute","f":"yute","c":"#B79A63"},{"n":"Yute zigzag crudo","f":"zz","a":"#EDE6D4","b":"#B79A6B","p":"zz"},{"n":"Yute zigzag negro","f":"zz","a":"#B49A6E","b":"#2B2620","p":"zz"},{"n":"Algodón negro","f":"color","c":"#211E1B"}],"sizes":[{"k":"S","d":"20 × 8 cm"},{"k":"M","d":"25 × 8 cm"},{"k":"L","d":"30 × 8 cm"}],"price":{"S":{"crudo":13000,"color":15000,"zz":15000,"yute":16000},"M":{"crudo":17000,"color":19000,"zz":19000,"yute":20000},"L":{"crudo":21000,"color":23000,"zz":23000,"yute":25000}}},{"id":"ind","n":"Individuales","s":"Individuales","colors":[{"n":"Algodón crudo","f":"crudo","c":"#E6DBC5"},{"n":"Yute","f":"yute","c":"#B79A63"},{"n":"Yute zigzag crudo","f":"zz","a":"#EDE6D4","b":"#B79A6B","p":"zz"},{"n":"Yute zigzag negro","f":"zz","a":"#B49A6E","b":"#2B2620","p":"zz"},{"n":"Sintético crudo","f":"sint","c":"#E7DECB"},{"n":"Blanco","f":"sint","c":"#F4F1EA"},{"n":"Rosa","f":"sint","c":"#D9A7B0"},{"n":"Gris perla","f":"sint","c":"#B9B7B0"},{"n":"Sambayón","f":"sint","c":"#D9C9A3"},{"n":"Habano","f":"sint","c":"#C79E6E"},{"n":"Salmón","f":"sint","c":"#D98C6A"},{"n":"Cobre y crudo zigzag","f":"sint","a":"#E9DFC9","b":"#A9743F","p":"zz"},{"n":"Cobre","f":"sint","c":"#B26B3F"},{"n":"Verde esmeralda","f":"sint","c":"#1F6B57"},{"n":"Verde militar","f":"sint","c":"#4B5236"},{"n":"Rojo","f":"sint","c":"#9E2B25"},{"n":"Azul marino","f":"sint","c":"#2A3550"},{"n":"Chocolate","f":"sint","c":"#4B3626"},{"n":"Bordo","f":"sint","c":"#5C2733"},{"n":"Negro","f":"sint","c":"#211E1B"}],"unit":true,"sizes":[{"k":"u","d":"34 cm · por unidad"}],"packs":[{"k":"×1","n":1},{"k":"×2","n":2},{"k":"×4","n":4},{"k":"×6","n":6}],"price":{"u":{"crudo":11000,"color":13000,"zz":15000,"yute":17000,"sint":14000},"×1":{"crudo":11000,"color":13000,"zz":15000,"yute":17000,"sint":14000},"×2":{"crudo":20000,"color":24000,"zz":28000,"yute":32000,"sint":26000},"×4":{"crudo":36000,"color":44000,"zz":52000,"yute":60000,"sint":48000},"×6":{"crudo":48000,"color":60000,"zz":72000,"yute":84000,"sint":66000}}},{"id":"pos","n":"Posavasos","s":"Posavasos","colors":[{"n":"Algodón crudo","f":"crudo","c":"#E6DBC5"},{"n":"Yute","f":"yute","c":"#B79A63"},{"n":"Yute zigzag crudo","f":"zz","a":"#EDE6D4","b":"#B79A6B","p":"zz"},{"n":"Yute zigzag negro","f":"zz","a":"#B49A6E","b":"#2B2620","p":"zz"},{"n":"Sintético crudo","f":"sint","c":"#E7DECB"},{"n":"Blanco","f":"sint","c":"#F4F1EA"},{"n":"Rosa","f":"sint","c":"#D9A7B0"},{"n":"Gris perla","f":"sint","c":"#B9B7B0"},{"n":"Sambayón","f":"sint","c":"#D9C9A3"},{"n":"Habano","f":"sint","c":"#C79E6E"},{"n":"Salmón","f":"sint","c":"#D98C6A"},{"n":"Cobre y crudo zigzag","f":"sint","a":"#E9DFC9","b":"#A9743F","p":"zz"},{"n":"Cobre","f":"sint","c":"#B26B3F"},{"n":"Verde esmeralda","f":"sint","c":"#1F6B57"},{"n":"Verde militar","f":"sint","c":"#4B5236"},{"n":"Rojo","f":"sint","c":"#9E2B25"},{"n":"Azul marino","f":"sint","c":"#2A3550"},{"n":"Chocolate","f":"sint","c":"#4B3626"},{"n":"Bordo","f":"sint","c":"#5C2733"},{"n":"Negro","f":"sint","c":"#211E1B"},{"n":"Combinado crudo con beige","f":"color","a":"#ECE5D4","b":"#C9A96F","p":"br"},{"n":"Combinado crudo con gris","f":"color","a":"#E9E2D3","b":"#949490","p":"br"},{"n":"Combinado beige con crudo","f":"color","a":"#C6A067","b":"#EDE6D3","p":"br"},{"n":"Combinado gris con crudo","f":"color","a":"#97968B","b":"#E6DFCD","p":"br"}],"unit":true,"sizes":[{"k":"u","d":"13 cm · por unidad"}],"packs":[{"k":"×1","n":1},{"k":"×2","n":2},{"k":"×4","n":4},{"k":"×6","n":6}],"price":{"u":{"crudo":3000,"color":3200,"zz":3600,"yute":3800,"sint":3500},"×1":{"crudo":3000,"color":3200,"zz":3600,"yute":3800,"sint":3500},"×2":{"crudo":5600,"color":6000,"zz":7000,"yute":7200,"sint":6600},"×4":{"crudo":10800,"color":11200,"zz":13600,"yute":13800,"sint":12000},"×6":{"crudo":15000,"color":16000,"zz":17500,"yute":18000,"sint":17000}}},{"id":"ant","n":"Porta anteojos","s":"P. anteojos","colors":[{"n":"Sintético crudo","f":"sint","c":"#E7DECB"},{"n":"Blanco","f":"sint","c":"#F4F1EA"},{"n":"Rosa","f":"sint","c":"#D9A7B0"},{"n":"Gris perla","f":"sint","c":"#B9B7B0"},{"n":"Sambayón","f":"sint","c":"#D9C9A3"},{"n":"Habano","f":"sint","c":"#C79E6E"},{"n":"Salmón","f":"sint","c":"#D98C6A"},{"n":"Cobre y crudo zigzag","f":"sint","a":"#E9DFC9","b":"#A9743F","p":"zz"},{"n":"Cobre","f":"sint","c":"#B26B3F"},{"n":"Verde esmeralda","f":"sint","c":"#1F6B57"},{"n":"Verde militar","f":"sint","c":"#4B5236"},{"n":"Rojo","f":"sint","c":"#9E2B25"},{"n":"Azul marino","f":"sint","c":"#2A3550"},{"n":"Chocolate","f":"sint","c":"#4B3626"},{"n":"Bordo","f":"sint","c":"#5C2733"},{"n":"Negro","f":"sint","c":"#211E1B"}],"sizes":[{"k":"Única","d":"16 cm"}],"price":{"Única":{"crudo":0,"color":0,"zz":0,"yute":0,"sint":8000}}},{"id":"car","n":"Porta carilinas","s":"P. carilinas","colors":[{"n":"Algodón crudo","f":"crudo","c":"#E6DBC5"},{"n":"Yute","f":"yute","c":"#B79A63"},{"n":"Yute zigzag crudo","f":"zz","a":"#EDE6D4","b":"#B79A6B","p":"zz"},{"n":"Yute zigzag negro","f":"zz","a":"#B49A6E","b":"#2B2620","p":"zz"}],"sizes":[{"k":"Única","d":"13 cm"}],"price":{"Única":{"crudo":8500,"color":8500,"zz":8500,"yute":8500,"sint":8500}}}],"metros":{"red":{"Mini":{"crudo":[3,110,"7 mm",28.5],"color":[3,155,"7 mm",28.5],"zz":[3,236,"7 mm",28.5],"yute":[2.5,356,"7 mm",23.75],"sint":[3,223,"—",28.5]},"S":{"crudo":[4.5,160,"9 mm",42.75],"color":[4.5,155,"7 mm",42.75],"zz":[5,236,"7 mm",47.5],"yute":[4.5,356,"7 mm",42.75]},"M":{"crudo":[7,160,"9 mm",66.5],"color":[7,320,"9 mm",66.5],"zz":[6.5,294,"9 mm",61.75],"yute":[4.5,440,"9 mm",42.75]},"L":{"crudo":[9.5,160,"9 mm",90.25],"color":[9.5,320,"9 mm",90.25],"zz":[6.5,294,"9 mm",61.75],"yute":[6.5,440,"9 mm",61.75]},"XL":{"crudo":[13.5,160,"9 mm",128.25],"color":[13.5,320,"9 mm",128.25],"zz":[8.5,294,"9 mm",80.75],"yute":[7.5,440,"9 mm",71.25]},"Mini sint.":{"sint":[3,223,"—",28.5]}},"ova":{"S":{"crudo":[6,160,"9 mm",53.52],"color":[6,320,"9 mm",53.52],"zz":[6,294,"9 mm",53.52],"yute":[4.5,440,"9 mm",40.14]},"M":{"crudo":[7.3,160,"9 mm",65.116],"color":[7.3,320,"9 mm",65.116],"zz":[8,294,"9 mm",71.36],"yute":[6.5,440,"9 mm",57.98]},"L":{"crudo":[10.5,160,"9 mm",93.66],"color":[10.5,320,"9 mm",93.66],"zz":[12,294,"9 mm",107.04],"yute":[12,440,"9 mm",107.04]},"XL":{"crudo":[11.7,160,"9 mm",104.364],"color":[11.7,320,"9 mm",104.364],"zz":[15,294,"9 mm",133.8],"yute":[15,440,"9 mm",133.8]}},"gra":{"S":{"crudo":[16.5,160,"9 mm",147.18],"color":[16.5,320,"9 mm",147.18],"zz":[12.5,294,"9 mm",111.5],"yute":[12.5,440,"9 mm",111.5]},"M":{"crudo":[26.5,160,"9 mm",236.38],"color":[26.5,320,"9 mm",236.38],"zz":[16,294,"9 mm",142.72],"yute":[16,440,"9 mm",142.72]},"L":{"crudo":[38,160,"9 mm",338.96],"color":[38,320,"9 mm",338.96],"zz":[28,294,"9 mm",249.76],"yute":[28,440,"9 mm",249.76]},"XL":{"crudo":[0,160,"9 mm",0.0],"color":[0,320,"9 mm",0.0],"zz":[0,294,"9 mm",0.0],"yute":[40,440,"9 mm",356.8]}},"ban":{"S":{"crudo":[6.5,160,"9 mm",57.98],"color":[6.5,320,"9 mm",57.98],"zz":[5.5,294,"9 mm",49.06],"yute":[5,440,"9 mm",44.6]},"M":{"crudo":[9,160,"9 mm",80.28],"color":[9,320,"9 mm",80.28],"zz":[9,294,"9 mm",80.28],"yute":[7,440,"9 mm",62.44]},"L":{"crudo":[13.5,160,"9 mm",120.42],"color":[13.5,320,"9 mm",120.42],"zz":[12,294,"9 mm",107.04],"yute":[11,440,"9 mm",98.12]}},"cen":{"S":{"crudo":[9.5,160,"9 mm",84.74],"color":[9.5,320,"9 mm",84.74],"zz":[9,294,"9 mm",80.28],"yute":[7.5,440,"9 mm",66.9]},"M":{"crudo":[13,160,"9 mm",115.96],"color":[13,320,"9 mm",115.96],"zz":[12,294,"9 mm",107.04],"yute":[11,440,"9 mm",98.12]},"L":{"crudo":[17,160,"9 mm",151.64],"color":[17,320,"9 mm",151.64],"zz":[16.5,294,"9 mm",147.18],"yute":[14,440,"9 mm",124.88]}},"ind":{"u":{"crudo":[12,110,"7 mm",107.04],"color":[12,187,"7 mm",107.04],"zz":[14.5,236,"7 mm",129.34],"yute":[12,356,"7 mm",107.04],"sint":[14,223,"—",124.88]}},"pos":{"u":{"crudo":[2,110,"7 mm",17.84],"color":[2,155,"7 mm",17.84],"zz":[2,236,"7 mm",17.84],"yute":[1.7,356,"7 mm",15.164],"sint":[2,223,"—",17.84]}},"ant":{"Única":{"sint":[7,223,"—",62.44]}},"car":{"Única":{"crudo":[9,110,"7 mm",80.28],"yute":[9,356,"7 mm",80.28],"zz":[9,236,"7 mm",80.28]}}},"hiloPm":6.26};
-const APPVER = "4.3";
+const APPVER = "5.0";
 const SEED = {"v":"planilla-2026-08","ops":[{"id":"8aecf6bc-3741-4ac6-aba6-d15a3f844a13","ts":1767441600000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-01-03","nota":"sabado","monto":301294,"cerrada":true},{"id":"4555ce74-5508-4a4b-85bc-0700bfe022ea","ts":1767528007000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-01-04","nota":"domingo","monto":377667,"cerrada":true},{"id":"af5a803c-6628-40ed-b61c-4c31422f8afa","ts":1767700814000,"by":"planilla","ty":"jopen","nombre":"6 Indiv gris oscuro Cumele","canal":"Feria","fecha":"2026-01-06","nota":"6 Indiv gris oscuro Cumelen 15mts soga tejida","monto":0,"cerrada":true},{"id":"92462d4f-d86a-4667-909a-bb9bac29ef92","ts":1767700814000,"by":"planilla","ty":"venta","k":"ind|u|Gris perla","q":6,"p":8250,"ch":"Feria","un":1,"j":"af5a803c-6628-40ed-b61c-4c31422f8afa","st":false,"imp":true},{"id":"224c91e1-9c6d-44b8-88c7-0dda58b1b49c","ts":1767787221000,"by":"planilla","ty":"jopen","nombre":"4 ind gris si t de 32cm x","canal":"Feria","fecha":"2026-01-07","nota":"4 ind gris si t de 32cm x terminación simple. Clienta de la feria francia","monto":0,"cerrada":true},{"id":"77713694-bfe5-4995-b44b-01dd55cbfaa7","ts":1767787221000,"by":"planilla","ty":"venta","k":"ind|u|Gris perla","q":4,"p":8250,"ch":"Feria","un":1,"j":"224c91e1-9c6d-44b8-88c7-0dda58b1b49c","st":false,"imp":true},{"id":"ed82b4fa-49e6-4000-b916-0f2f89f7107f","ts":1768046428000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-01-10","nota":"sabado 11/1","monto":102225,"cerrada":true},{"id":"2cc142a5-c102-430d-a3ef-9b80a4146d5c","ts":1768132835000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-01-11","nota":"lunes 12/1","monto":422323,"cerrada":true},{"id":"3aee39fc-5a25-4855-afaf-7ccbd68f9b51","ts":1768305642000,"by":"planilla","ty":"jopen","nombre":"Nancy de la feria del CMB","canal":"Feria","fecha":"2026-01-13","nota":"Nancy de la feria del CMB 15 paneras red M alt 6 diam 16 yute zz x borde yute","monto":5,"cerrada":true},{"id":"87906a60-e598-4036-9e84-b8e6f28197bd","ts":1768305642000,"by":"planilla","ty":"venta","k":"red|M|Yute zigzag crudo","q":15,"p":5763,"ch":"Feria","un":1,"j":"3aee39fc-5a25-4855-afaf-7ccbd68f9b51","st":false,"imp":true},{"id":"5c990e5f-7fbe-4c42-9634-9a0927b69692","ts":1769947249000,"by":"planilla","ty":"jopen","nombre":"Feria Plz Francia Domingo","canal":"Feria","fecha":"2026-02-01","nota":"Feria Plz Francia Domingo","monto":107535,"cerrada":true},{"id":"42fd6ea6-15a6-4a39-86f4-d3e0c784813e","ts":1770120056000,"by":"planilla","ty":"jopen","nombre":"Susana Ortuño 2 ind chocol","canal":"Feria","fecha":"2026-02-03","nota":"Susana Ortuño 2 ind chocolate","monto":0,"cerrada":true},{"id":"f140ad49-c08b-4055-a7aa-3baa116eab30","ts":1770120056000,"by":"planilla","ty":"venta","k":"ind|u|Chocolate","q":2,"p":8500,"ch":"Feria","un":1,"j":"42fd6ea6-15a6-4a39-86f4-d3e0c784813e","st":false,"imp":true},{"id":"6a6b1893-2ea8-439e-b368-e18e68eb1970","ts":1770465603000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-02-07","nota":"","monto":316035,"cerrada":true},{"id":"dc9b7ce6-e17e-430a-851b-6a11d25a7010","ts":1771070410000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-02-14","nota":"sabado","monto":311943,"cerrada":true},{"id":"020bd1ff-ee0f-44aa-b3cb-5bd1c9ad368b","ts":1771156817000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-02-15","nota":"domingo","monto":196630,"cerrada":true},{"id":"90c3a2e3-4201-42ad-8a9d-339b466e65c0","ts":1771243224000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-02-16","nota":"lunes","monto":232300,"cerrada":true},{"id":"713548dc-1f8e-4dcf-ae2b-1f7cf0934c8e","ts":1771243231000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-02-16","nota":"domigno panama","monto":420000,"cerrada":true},{"id":"e5546a78-f545-49a5-8da3-4d0205b32e25","ts":1771329638000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-02-17","nota":"martes","monto":100147,"cerrada":true},{"id":"afb4f618-6779-4e3f-8f85-541eb26e99fc","ts":1771588845000,"by":"planilla","ty":"jopen","nombre":"Flor Salvat 4 Indiv redond","canal":"Amigos y familia","fecha":"2026-02-20","nota":"Flor Salvat 4 Indiv redondos gris topo tejidos de Cumelen y 3 ovalados. $9500 los ovalados y $8250 los redondos","monto":0,"cerrada":true},{"id":"c285d624-356e-471c-9840-b92c580611f5","ts":1771588845000,"by":"planilla","ty":"venta","k":"ind|u|Gris perla","q":4,"p":18261,"ch":"Amigos y familia","un":1,"j":"afb4f618-6779-4e3f-8f85-541eb26e99fc","st":false,"imp":true},{"id":"835f06bc-e627-401c-a884-9f0434cbc056","ts":1771675252000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-02-21","nota":"Sab 21/2","monto":300500,"cerrada":true},{"id":"ac80fa4d-26a3-453d-99b5-601397ea355d","ts":1771761659000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-02-22","nota":"","monto":115345,"cerrada":true},{"id":"6770e15d-fc41-4cde-9ce2-c356f1252ee1","ts":1771761606000,"by":"planilla","ty":"jopen","nombre":"Chechu ferro 3 porta anteo","canal":"Amigos y familia","fecha":"2026-02-22","nota":"Chechu ferro 3 porta anteojos","monto":24000,"cerrada":true},{"id":"17a56e53-8781-4ee5-891e-9c6924fdf206","ts":1772280013000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-02-28","nota":"Sab 28/2","monto":366649,"cerrada":true},{"id":"299d0869-d43e-45ff-9037-9f663dd82def","ts":1772452820000,"by":"planilla","ty":"jopen","nombre":"Feria plaza francia doming","canal":"Feria","fecha":"2026-03-02","nota":"Feria plaza francia domingo","monto":94044,"cerrada":true},{"id":"3ca033d0-5d59-44a8-b0d1-f3a38645d3b0","ts":1772884827000,"by":"planilla","ty":"jopen","nombre":"Feria plaza francia sábado","canal":"Feria","fecha":"2026-03-07","nota":"Feria plaza francia sábado","monto":272868,"cerrada":true},{"id":"bd2b387d-46fd-4d51-806e-9d6124b69acb","ts":1772971234000,"by":"planilla","ty":"jopen","nombre":"Feria plaza francia doming","canal":"Feria","fecha":"2026-03-08","nota":"Feria plaza francia domingo","monto":182863,"cerrada":true},{"id":"e3065ac7-373c-4d28-93f4-4e274693b931","ts":1773230441000,"by":"planilla","ty":"jopen","nombre":"6 ind sambayon Maguie Cabr","canal":"Amigos y familia","fecha":"2026-03-11","nota":"6 ind sambayon Maguie Cabrera","monto":0,"cerrada":true},{"id":"8f3a2c3f-e2b7-4cd2-9212-99fa0ba43e4e","ts":1773230441000,"by":"planilla","ty":"venta","k":"ind|u|Sambayón","q":6,"p":7500,"ch":"Amigos y familia","un":1,"j":"e3065ac7-373c-4d28-93f4-4e274693b931","st":false,"imp":true},{"id":"a4d1d736-fd53-4dd6-9fc8-ba060783e8d5","ts":1773316848000,"by":"planilla","ty":"jopen","nombre":"Pedido panama 30 ind cobre","canal":"Feria","fecha":"2026-03-12","nota":"Pedido panama 30 ind cobre, 30 indi zz sint, 20 indi crudos, 50 pv sint zz, y 50 pv cobre","monto":0,"cerrada":true},{"id":"67175e21-89e3-46b2-83c0-96d576290537","ts":1773316848000,"by":"planilla","ty":"venta","k":"ind|u|Cobre","q":30,"p":6720,"ch":"Feria","un":1,"j":"a4d1d736-fd53-4dd6-9fc8-ba060783e8d5","st":false,"imp":true},{"id":"4fa3d784-9d11-4e3e-8064-89ea58987de2","ts":1773316848000,"by":"planilla","ty":"venta","k":"ind|u|Sintético crudo","q":20,"p":6720,"ch":"Feria","un":1,"j":"a4d1d736-fd53-4dd6-9fc8-ba060783e8d5","st":false,"imp":true},{"id":"ca3d613c-990b-4f13-b51e-1f6097d137e6","ts":1773316848000,"by":"planilla","ty":"venta","k":"pos|u|Cobre","q":50,"p":1680,"ch":"Feria","un":1,"j":"a4d1d736-fd53-4dd6-9fc8-ba060783e8d5","st":false,"imp":true},{"id":"9e21fc4b-4401-4724-b027-90a131435758","ts":1773489655000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-03-14","nota":"sabado","monto":253289,"cerrada":true},{"id":"78488f31-d063-4b61-952a-eea4500b6d4e","ts":1773576002000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-03-15","nota":"domingo","monto":212905,"cerrada":true},{"id":"626cdba3-2b9a-4007-9165-c7026896f6e3","ts":1774008009000,"by":"planilla","ty":"jopen","nombre":"Berni 2 posavasos símil yu","canal":"Amigos y familia","fecha":"2026-03-20","nota":"Berni 2 posavasos símil yute sin rulo $5000 y un individual chico $8500","monto":2500,"cerrada":true},{"id":"7c054379-b710-4fdb-b471-829a23f6c3c1","ts":1774008009000,"by":"planilla","ty":"venta","k":"pos|u|Yute","q":2,"p":5000,"ch":"Amigos y familia","un":1,"j":"626cdba3-2b9a-4007-9165-c7026896f6e3","st":false,"imp":true},{"id":"097dfd16-df5b-416d-b9ac-d6fc779a46c4","ts":1774180816000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-03-22","nota":"","monto":473546,"cerrada":true},{"id":"f3f4d582-9717-4a8b-9702-5a88bbc91c93","ts":1774267223000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-03-23","nota":"","monto":328599,"cerrada":true},{"id":"e4b1e907-5492-44b0-9365-6b107fb56e20","ts":1774699230000,"by":"planilla","ty":"jopen","nombre":"Feria sábado lluvia","canal":"Feria","fecha":"2026-03-28","nota":"Feria sábado lluvia","monto":62800,"cerrada":true},{"id":"3c00a8fe-29a9-4297-8364-99d7d81e7ed7","ts":1774785637000,"by":"planilla","ty":"jopen","nombre":"Feria domingo lluvia","canal":"Feria","fecha":"2026-03-29","nota":"Feria domingo lluvia","monto":84000,"cerrada":true},{"id":"ccd6e413-2f83-4c07-8e5b-78d2052b79a5","ts":1775131244000,"by":"planilla","ty":"jopen","nombre":"Laura Magnole 6 ind crudos","canal":"Amigos y familia","fecha":"2026-04-02","nota":"Laura Magnole 6 ind crudos Sint/ 2 ova crudas / red m visón / 2 yute L / 2 crudas chatas","monto":0,"cerrada":true},{"id":"e92f44bd-43b0-4720-b9a3-ac2244075b88","ts":1775131244000,"by":"planilla","ty":"venta","k":"ind|u|Sintético crudo","q":6,"p":18742,"ch":"Amigos y familia","un":1,"j":"ccd6e413-2f83-4c07-8e5b-78d2052b79a5","st":false,"imp":true},{"id":"637df041-2bef-4d84-98cf-bb45579d6a0b","ts":1775131244000,"by":"planilla","ty":"venta","k":"red|M|Visón","q":1,"p":12048,"ch":"Amigos y familia","un":1,"j":"ccd6e413-2f83-4c07-8e5b-78d2052b79a5","st":false,"imp":true},{"id":"a0495f4e-6716-4fc4-bc3b-376b644da4c6","ts":1775131251000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-04-02","nota":"jueves santo","monto":46621,"cerrada":true},{"id":"c239e760-4cca-4f25-9335-4532cf57accd","ts":1775217658000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-04-03","nota":"viernes santo","monto":33500,"cerrada":true},{"id":"f299be64-0e2d-4d02-9f31-552999c9586d","ts":1775304005000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-04-04","nota":"sabado santo 4/4","monto":141684,"cerrada":true},{"id":"2f11c85e-ed97-45e4-a96a-4ee4e9f275ba","ts":1775908812000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-04-11","nota":"Sábado","monto":153449,"cerrada":true},{"id":"42e55380-1c50-457e-a448-3916c0a9db02","ts":1775995219000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-04-12","nota":"Domingo","monto":217795,"cerrada":true},{"id":"6a2cbc67-b8e5-4dff-abb8-a930416d4420","ts":1776340826000,"by":"planilla","ty":"jopen","nombre":"Cliente nordelta 2 ind gri","canal":"Feria","fecha":"2026-04-16","nota":"Cliente nordelta 2 ind grises sintéticos + 5000 envío","monto":12000,"cerrada":true},{"id":"182976db-a21b-4ac1-881a-65fa4a00213d","ts":1776340826000,"by":"planilla","ty":"venta","k":"ind|u|Gris perla","q":2,"p":5000,"ch":"Feria","un":1,"j":"6a2cbc67-b8e5-4dff-abb8-a930416d4420","st":false,"imp":true},{"id":"c88264a9-e9ad-4f6a-b657-73f6a3db252d","ts":1776427233000,"by":"planilla","ty":"jopen","nombre":"Ceci Gismondi 2 red yute x","canal":"Amigos y familia","fecha":"2026-04-17","nota":"Ceci Gismondi 2 red yute xl c borde yute zz crudo","monto":0,"cerrada":true},{"id":"61627336-314c-439d-af96-53b0ddcd26b4","ts":1776427233000,"by":"planilla","ty":"venta","k":"red|XL|Yute zigzag crudo","q":2,"p":20000,"ch":"Amigos y familia","un":1,"j":"c88264a9-e9ad-4f6a-b657-73f6a3db252d","st":false,"imp":true},{"id":"d6c1daf8-1ac4-43af-a0d0-9f1f63d1955c","ts":1776513640000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-04-18","nota":"Sábado","monto":161190,"cerrada":true},{"id":"bcff382f-eedb-4b93-ad7d-e03237e79e25","ts":1776513647000,"by":"planilla","ty":"jopen","nombre":"Pao 1 porta anteojos verde","canal":"Amigos y familia","fecha":"2026-04-18","nota":"Pao 1 porta anteojos verde y azul","monto":0,"cerrada":true},{"id":"0f3759d0-ac06-4712-a348-62ea1cdc1cca","ts":1776513647000,"by":"planilla","ty":"venta","k":"ant|Única|Azul marino","q":1,"p":16000,"ch":"Amigos y familia","un":1,"j":"bcff382f-eedb-4b93-ad7d-e03237e79e25","st":false,"imp":true},{"id":"940462b3-1438-47c3-a711-e838c99c05a0","ts":1776686454000,"by":"planilla","ty":"jopen","nombre":"Romi Zapata Red gris M $80","canal":"Amigos y familia","fecha":"2026-04-20","nota":"Romi Zapata Red gris M $8000 y XL $16000","monto":16000,"cerrada":true},{"id":"1fb66848-7904-4b92-9b70-9b7fbfbd14f9","ts":1776686454000,"by":"planilla","ty":"venta","k":"red|XL|Gris","q":1,"p":8000,"ch":"Amigos y familia","un":1,"j":"940462b3-1438-47c3-a711-e838c99c05a0","st":false,"imp":true},{"id":"161f6780-9cad-4c2b-beaa-14f8082de32a","ts":1777118401000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-04-25","nota":"","monto":216125,"cerrada":true},{"id":"c2741cbc-6496-4c44-9398-2fb92f3ecab1","ts":1777636808000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-05-01","nota":"Viernes feriado Pl francia","monto":321784,"cerrada":true},{"id":"d3495403-7b12-4311-8623-31ac95d76688","ts":1777723215000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-05-02","nota":"Sábado Pl Francia","monto":87578,"cerrada":true},{"id":"0fde7b30-812d-4445-9ad3-5b6eb55f74b4","ts":1777809622000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-05-03","nota":"Domingo Pl Francia","monto":350045,"cerrada":true},{"id":"288dc7f7-bd51-4535-bde8-0efd8332e44b","ts":1778414429000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-05-10","nota":"domingo 10/5","monto":221529,"cerrada":true},{"id":"629b2fcf-634b-4322-a1ed-627a2a038291","ts":1778846436000,"by":"planilla","ty":"jopen","nombre":"Ovalado yute S Carolina ve","canal":"Amigos y familia","fecha":"2026-05-15","nota":"Ovalado yute S Carolina vecina 6to","monto":0,"cerrada":true},{"id":"4f68026a-456f-4952-bf65-7b68e2f774cd","ts":1778846436000,"by":"planilla","ty":"venta","k":"ova|S|Yute","q":1,"p":10000,"ch":"Amigos y familia","un":1,"j":"629b2fcf-634b-4322-a1ed-627a2a038291","st":false,"imp":true},{"id":"a28a51ae-4892-4862-9b87-4f559e50ace1","ts":1778932843000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-05-16","nota":"","monto":208166,"cerrada":true},{"id":"7132fb64-3348-4924-a5c9-e88ed7f173be","ts":1779019250000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-05-17","nota":"","monto":70000,"cerrada":true},{"id":"d59ef3cf-badc-43c7-8730-a11a5d63b432","ts":1779105657000,"by":"planilla","ty":"jopen","nombre":"Negro amigos entretiempo…","canal":"Amigos y familia","fecha":"2026-05-18","nota":"Negro amigos entretiempo… no sabemos que vendió…","monto":70000,"cerrada":true},{"id":"8663a51b-a8cf-4913-8975-9d141634c110","ts":1779537604000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-05-23","nota":"","monto":70208,"cerrada":true},{"id":"97b1f7cd-fe18-448a-b84d-a8bb65167d20","ts":1779624011000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-05-24","nota":"","monto":149440,"cerrada":true},{"id":"31c9fc51-8a17-4b13-940c-e0a87d45f4bd","ts":1779710418000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-05-25","nota":"","monto":181000,"cerrada":true},{"id":"d474b7b3-adc5-499e-8e3e-3384a0817cf2","ts":1780142425000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-05-30","nota":"","monto":190360,"cerrada":true},{"id":"73ed1857-14b1-4d51-b0eb-2337b39d00b4","ts":1780228832000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-05-31","nota":"","monto":45000,"cerrada":true},{"id":"e5f0b3c9-0d9b-4022-b984-43f8bf711a99","ts":1780747239000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-06-06","nota":"sábado 6/6","monto":154492,"cerrada":true},{"id":"6e95d16b-5d25-45a3-8151-e2d832504f5c","ts":1781006446000,"by":"planilla","ty":"jopen","nombre":"Clienta de Pl Francia 6 in","canal":"Feria","fecha":"2026-06-09","nota":"Clienta de Pl Francia 6 ind rosas","monto":0,"cerrada":true},{"id":"d79eae43-bc76-4ad3-b522-458b9f269934","ts":1781006446000,"by":"planilla","ty":"venta","k":"ind|u|Rosa","q":6,"p":4625,"ch":"Feria","un":1,"j":"6e95d16b-5d25-45a3-8151-e2d832504f5c","st":false,"imp":true},{"id":"3398a82a-3986-45d0-b245-7ddc9250130c","ts":1781352053000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-06-13","nota":"","monto":106000,"cerrada":true},{"id":"754082c1-4c22-437a-968b-72d15a53a164","ts":1781438400000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-06-14","nota":"","monto":120000,"cerrada":true},{"id":"35655f9f-b6c1-4c78-b4a4-232a34c3fc4b","ts":1781524807000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-06-15","nota":"","monto":79500,"cerrada":true},{"id":"c09a13aa-3655-420b-bfd9-7604e23d3c49","ts":1781784014000,"by":"planilla","ty":"jopen","nombre":"Valeria clienta feria reco","canal":"Feria","fecha":"2026-06-18","nota":"Valeria clienta feria recoleta, 14 individuales zz sint 129500 y 6 posavasos 15000 envío 2500","monto":147000,"cerrada":true},{"id":"6ad7ccdc-0556-4f13-aaa3-5fb708534486","ts":1781870421000,"by":"planilla","ty":"jopen","nombre":"Marife 10 ind grises","canal":"Amigos y familia","fecha":"2026-06-19","nota":"Marife 10 ind grises","monto":0,"cerrada":true},{"id":"c5160f18-e66f-4357-a9db-ae55a91e2f13","ts":1781870421000,"by":"planilla","ty":"venta","k":"ind|u|Gris perla","q":10,"p":9000,"ch":"Amigos y familia","un":1,"j":"6ad7ccdc-0556-4f13-aaa3-5fb708534486","st":false,"imp":true},{"id":"a63b58c3-bbc2-4f30-9497-0be4117acf3a","ts":1781956828000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-06-20","nota":"sábado 20/6","monto":138239,"cerrada":true},{"id":"97098944-42db-48f6-b008-f1ddfcead070","ts":1782561635000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-06-27","nota":"Sábado  27","monto":103800,"cerrada":true},{"id":"1216379a-4b22-41d5-9c63-6e820d191314","ts":1782648042000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-06-28","nota":"domingo 28","monto":212000,"cerrada":true},{"id":"1eb43f62-a92a-48ba-9c6c-f4636f6beb54","ts":1782734449000,"by":"planilla","ty":"jopen","nombre":"M Marta CSA Red Verde seco","canal":"Amigos y familia","fecha":"2026-06-29","nota":"M Marta CSA Red Verde seco M, L, XL, 8000,12000,14000","monto":0,"cerrada":true},{"id":"bf1d3661-b783-4af4-a313-02cab1221b16","ts":1782734449000,"by":"planilla","ty":"venta","k":"red|M|Verde seco","q":1,"p":7846,"ch":"Amigos y familia","un":1,"j":"1eb43f62-a92a-48ba-9c6c-f4636f6beb54","st":false,"imp":true},{"id":"cd352e17-1c20-4b2b-87d8-477924d0a974","ts":1782734449000,"by":"planilla","ty":"venta","k":"red|L|Verde seco","q":1,"p":11333,"ch":"Amigos y familia","un":1,"j":"1eb43f62-a92a-48ba-9c6c-f4636f6beb54","st":false,"imp":true},{"id":"e6a88833-0d23-4ff0-a32d-ab375f071a24","ts":1782734449000,"by":"planilla","ty":"venta","k":"red|XL|Verde seco","q":1,"p":14821,"ch":"Amigos y familia","un":1,"j":"1eb43f62-a92a-48ba-9c6c-f4636f6beb54","st":false,"imp":true},{"id":"d6aa1340-fa6a-44fe-9902-6c8df0ca6beb","ts":1782820856000,"by":"planilla","ty":"jopen","nombre":"Ovalado especial para 4 pa","canal":"Feria","fecha":"2026-06-30","nota":"Ovalado especial para 4 papeles hig crudo","monto":33000,"cerrada":true},{"id":"c01798af-4c17-46c7-bafb-c9cbcb0b1e1b","ts":1783166403000,"by":"planilla","ty":"jopen","nombre":"Curvo crudo M // Feria en","canal":"Amigos y familia","fecha":"2026-07-04","nota":"Curvo crudo M // Feria en casa","monto":8000,"cerrada":true},{"id":"ac138715-bb36-4eb1-8243-ed15d0531d41","ts":1783166410000,"by":"planilla","ty":"jopen","nombre":"Feria Reco sábado","canal":"Feria","fecha":"2026-07-04","nota":"Feria Reco sábado","monto":55400,"cerrada":true},{"id":"880a835d-d167-45a9-b325-06135ae0cf30","ts":1783598417000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-07-09","nota":"jueves 9/7","monto":94431,"cerrada":true},{"id":"30da0aa2-8003-43d6-aebe-6c9a2db4f459","ts":1783684824000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-07-10","nota":"viernes 10/7","monto":224866,"cerrada":true},{"id":"a95f3f97-5f13-4dce-9eb7-d55f64543311","ts":1783771231000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-07-11","nota":"sábado 11/7","monto":196376,"cerrada":true},{"id":"8cc156c7-9905-49a2-bbe2-b66132d1111e","ts":1783857638000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-07-12","nota":"domingo 12/7","monto":56500,"cerrada":true},{"id":"e2911360-e202-4b9d-a78e-005b1a2e2892","ts":1784289645000,"by":"planilla","ty":"jopen","nombre":"Alicia Girbone 2 oval blan","canal":"Amigos y familia","fecha":"2026-07-17","nota":"Alicia Girbone 2 oval blancas de sintético","monto":19000,"cerrada":true},{"id":"644d2e8e-f230-403e-aed4-ce5daccb770d","ts":1784721652000,"by":"planilla","ty":"jopen","nombre":"1 oval tostado L $16000 /","canal":"Amigos y familia","fecha":"2026-07-22","nota":"1 oval tostado L $16000 /  Red Tost M $9000 y XL $17000","monto":24000,"cerrada":true},{"id":"2d465fa6-92d2-4ef2-b2df-ff0fa8c8f6c3","ts":1784721652000,"by":"planilla","ty":"venta","k":"ova|L|Tostado","q":1,"p":16000,"ch":"Amigos y familia","un":1,"j":"644d2e8e-f230-403e-aed4-ce5daccb770d","st":false,"imp":true},{"id":"0c9b99ef-52ba-4e61-b073-2417c8866a61","ts":1784980859000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-07-25","nota":"","monto":351364,"cerrada":true},{"id":"027ceb56-9999-45f0-ad5d-c352ec685473","ts":1785067206000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-07-26","nota":"","monto":196300,"cerrada":true},{"id":"ef7a21a7-d507-4b74-9be4-01a5cf76379e","ts":1785585613000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-08-01","nota":"","monto":254309,"cerrada":true},{"id":"df3c8b7c-71f2-41f7-9652-71abf0f151da","ts":1785672020000,"by":"planilla","ty":"jopen","nombre":"Feria","canal":"Feria","fecha":"2026-08-02","nota":"","monto":26000,"cerrada":true},{"id":"9eadfe92-3f88-49fa-a309-7a0fc0c9670d","ts":1786104027000,"by":"planilla","ty":"jopen","nombre":"Agus Psi Timo 2 canastos G","canal":"Amigos y familia","fecha":"2026-08-07","nota":"Agus Psi Timo 2 canastos Grandes M Crudos","monto":0,"cerrada":true},{"id":"7c09facb-80c1-4272-9a59-99b44ca9e233","ts":1786104027000,"by":"planilla","ty":"venta","k":"gra|M|Algodón crudo","q":2,"p":26000,"ch":"Amigos y familia","un":1,"j":"9eadfe92-3f88-49fa-a309-7a0fc0c9670d","st":false,"imp":true}]};
+const SEEDF = {"v":"ferias-2026-08","ops":[{"id":"eeb16a43-f553-4032-a626-45a212cf6693","ts":1785574800000,"by":"planilla","ty":"feria","nombre":"Puro Diseño","ubic":"La rural","costo":0,"costoTxt":"","tel":"","mail":"","contacto":"","link":"https://purodiseno.lat/tendencias/se-lanzo-la-preventa-para-expositores-de-feria-puro-diseno-2026-en-la-rural/","nota":"Preguntar sobre el formato popup puro diseño que son ferias mas chicas durante el año si consideramos cara","hora":"","estado":"anotada"},{"id":"e7ae91ff-14b3-4312-a5a0-35709e83c7b6","ts":1785574800001,"by":"planilla","ty":"ffecha","f":"eeb16a43-f553-4032-a626-45a212cf6693","fecha":"2026-10-09","hora":"","costo":0,"nota":""},{"id":"7de921e2-c7b2-4a3e-880e-f790ed4b97cf","ts":1785574800002,"by":"planilla","ty":"ffecha","f":"eeb16a43-f553-4032-a626-45a212cf6693","fecha":"2026-10-10","hora":"","costo":0,"nota":""},{"id":"93744510-7237-460a-bdea-033d85515a6a","ts":1785574800003,"by":"planilla","ty":"ffecha","f":"eeb16a43-f553-4032-a626-45a212cf6693","fecha":"2026-10-11","hora":"","costo":0,"nota":""},{"id":"2cce6647-73db-482d-8ea4-006932805d51","ts":1785574800100,"by":"planilla","ty":"feria","nombre":"Estilo Diseño","ubic":"Av. Mosconi 3800, Villa Devoto","costo":120000,"costoTxt":"$120.000,00","tel":"","mail":"feriaestilod@gmail.com","contacto":"Ines y Giselle feriaestilod@gmail.com","link":"https://www.instagram.com/feriaestilod/?hl=es","nota":"Se comparte el stand con marca amiga. Lugar al parecer bastante grande. La mesa es responsabilidad nuestra o se alquila por $7500. · Cerrada. NECESITAMOS GAZEBO","hora":"11-19 hs","estado":"descartada"},{"id":"41a61e9e-d0e4-4853-a630-bdb35f96f5d5","ts":1785574800101,"by":"planilla","ty":"ffecha","f":"2cce6647-73db-482d-8ea4-006932805d51","fecha":"2026-08-09","hora":"11-19 hs","costo":0,"nota":""},{"id":"83d0ee38-d677-4495-baab-d98f207f6afe","ts":1785574800200,"by":"planilla","ty":"feria","nombre":"El Mercadito","ubic":"Av Dorrego 2141","costo":65000,"costoTxt":"52-65k","tel":"11 7362-6876","mail":"info.feriaelmercadito@gmail.com","contacto":"11 7362-6876  info.feriaelmercadito@gmail.com","link":"https://www.instagram.com/feriaelmercadito/?hl=es","nota":"Fuimos una vez y vendimos un solo canasto · -","hora":"11:30-19 hs","estado":"postulados"},{"id":"3ffdfd2b-bbfa-44f6-bdd3-7d075928ed01","ts":1785574800201,"by":"planilla","ty":"ffecha","f":"83d0ee38-d677-4495-baab-d98f207f6afe","fecha":"2026-08-15","hora":"11:30-19 hs","costo":0,"nota":""},{"id":"f2de0a86-af51-4ffa-af62-0b81e227f977","ts":1785574800202,"by":"planilla","ty":"ffecha","f":"83d0ee38-d677-4495-baab-d98f207f6afe","fecha":"2026-08-17","hora":"11:30-19 hs","costo":0,"nota":""},{"id":"46fe0b05-165a-417e-9f25-d7dc6ffbddf7","ts":1785574800300,"by":"planilla","ty":"feria","nombre":"Ventana creativa","ubic":"Capdevila y Quesada, Villa Urquiza","costo":40000,"costoTxt":"25-40k","tel":"","mail":"feriaventanacreativa@gmail.com","contacto":"feriaventanacreativa@gmail.com","link":"https://www.instagram.com/feriaventanacreativa/?hl=es","nota":"Yo iria a la del 15/8 a probar. 35/40k los mejores stands cerca del buffet o baño de mujeres. · 15/8","hora":"18-18:30 hs","estado":"postulados"},{"id":"a89e874a-b986-42c3-8e34-cbe8905240db","ts":1785574800301,"by":"planilla","ty":"ffecha","f":"46fe0b05-165a-417e-9f25-d7dc6ffbddf7","fecha":"2026-08-15","hora":"18-18:30 hs","costo":0,"nota":""},{"id":"785b5737-8ebb-4f70-9309-bb21d51cedfa","ts":1785574800302,"by":"planilla","ty":"ffecha","f":"46fe0b05-165a-417e-9f25-d7dc6ffbddf7","fecha":"2026-09-12","hora":"18-18:30 hs","costo":0,"nota":""},{"id":"90702fa8-b39b-4eaf-88b7-c13e6451b143","ts":1785574800303,"by":"planilla","ty":"ffecha","f":"46fe0b05-165a-417e-9f25-d7dc6ffbddf7","fecha":"2026-10-10","hora":"18-18:30 hs","costo":0,"nota":""},{"id":"c6aea77f-ec72-4cb9-93df-b2c061f212d8","ts":1785574800400,"by":"planilla","ty":"feria","nombre":"Festiva","ubic":"Plaza Güemes","costo":200000,"costoTxt":"2 dias 160k sin mesa, 200k con","tel":"","mail":"experienciafestiva@gmail.com","contacto":"experienciafestiva@gmail.com","link":"https://www.instagram.com/festiva__/?hl=es","nota":"Esta metido el gobierno de la ciudad y piden registrarse en las Ferias de la Ciudad. Me gusto bastante, yo me postularia · Directo Sept","hora":"12-18 hs","estado":"postulados"},{"id":"0e910fcf-d3a0-45e4-a70d-5e8ddf86368c","ts":1785574800401,"by":"planilla","ty":"ffecha","f":"c6aea77f-ec72-4cb9-93df-b2c061f212d8","fecha":"2026-09-05","hora":"12-18 hs","costo":0,"nota":""},{"id":"0a3bee9e-34e1-4ff2-afe1-b66c8f5f358a","ts":1785574800402,"by":"planilla","ty":"ffecha","f":"c6aea77f-ec72-4cb9-93df-b2c061f212d8","fecha":"2026-09-06","hora":"12-18 hs","costo":0,"nota":""},{"id":"de316e34-8948-46de-b474-c8c43e81ec53","ts":1785574800500,"by":"planilla","ty":"feria","nombre":"La casona emprendedores","ubic":"Brava Bar. Mendoza 5234, Villa Urquiza","costo":45000,"costoTxt":"30-45k","tel":"","mail":"Rominaferialacasona@gmail.com","contacto":"Claudia y Rominaferialacasona@gmail.com","link":"https://www.instagram.com/ferialacasonaemprendedores/","nota":"No me cierra el lugar. Quizas probaria pero priorizaria otras. O la otra es ir una fecha para tantearla o tambien escribirle a algun emprendedor que haya ido. · No cerro el lugar","hora":"","estado":"descartada"},{"id":"4baa6d92-4466-454c-bb33-a8da3aa44105","ts":1785574800501,"by":"planilla","ty":"ffecha","f":"de316e34-8948-46de-b474-c8c43e81ec53","fecha":"2026-08-08","hora":"","costo":0,"nota":""},{"id":"8862724f-87b8-443e-8dcf-f2f184d1f571","ts":1785574800600,"by":"planilla","ty":"feria","nombre":"Mercado creativo","ubic":"Quetren club culturalBarrio chino","costo":65000,"costoTxt":"65k","tel":"11 6927-7206","mail":"","contacto":"Ale 11 6927-7206","link":"https://www.instagram.com/creativomercado/","nota":"Horario de 14.30 a 18.30 · Pagar","hora":"13-18 hs","estado":"aceptados"},{"id":"2ddeec43-b1de-4459-aa8f-aeaa3f4d2474","ts":1785574800601,"by":"planilla","ty":"ffecha","f":"8862724f-87b8-443e-8dcf-f2f184d1f571","fecha":"2026-08-29","hora":"13-18 hs","costo":0,"nota":""},{"id":"be88e33a-0342-407c-9c54-f070a28d02bb","ts":1785574800700,"by":"planilla","ty":"feria","nombre":"Gran Bazar Balcarce","ubic":"Quintana 161","costo":0,"costoTxt":"","tel":"","mail":"","contacto":"","link":"https://www.instagram.com/granbazar.balcarce/","nota":"Nos clavaron","hora":"","estado":"descartada"},{"id":"7994a84c-3224-4512-a1cf-62141530b9df","ts":1785574800701,"by":"planilla","ty":"ffecha","f":"be88e33a-0342-407c-9c54-f070a28d02bb","fecha":"2026-08-04","hora":"","costo":0,"nota":""},{"id":"fd88bd43-53a9-4b29-b7dd-4fea3c99bd6f","ts":1785574800702,"by":"planilla","ty":"ffecha","f":"be88e33a-0342-407c-9c54-f070a28d02bb","fecha":"2026-08-05","hora":"","costo":0,"nota":""},{"id":"607ed0a2-9a67-49c0-a975-79812b2f388a","ts":1785574800703,"by":"planilla","ty":"ffecha","f":"be88e33a-0342-407c-9c54-f070a28d02bb","fecha":"2026-08-06","hora":"","costo":0,"nota":""},{"id":"548f1286-6085-41fe-834f-aab3302cfb90","ts":1785574800800,"by":"planilla","ty":"feria","nombre":"Ofelia Market","ubic":"Plaza Sobral, Palermo. Cruzando LH.","costo":180000,"costoTxt":"180k + IVA","tel":"","mail":"ecoferia@ofelia.com.ar","contacto":"ecoferia@ofelia.com.ar","link":"https://www.instagram.com/ofeliamarket/","nota":"Nos aceptaron, analizar y pagar.","hora":"","estado":"aceptados"},{"id":"6565542a-a3ab-4b8b-abce-1b2f39a6df99","ts":1785574800801,"by":"planilla","ty":"ffecha","f":"548f1286-6085-41fe-834f-aab3302cfb90","fecha":"2026-08-15","hora":"","costo":0,"nota":""},{"id":"45136365-b5cd-4565-8bfd-77d8a0ba1c49","ts":1785574800802,"by":"planilla","ty":"ffecha","f":"548f1286-6085-41fe-834f-aab3302cfb90","fecha":"2026-08-16","hora":"","costo":0,"nota":""},{"id":"d007a9a1-95e7-4cdf-b916-45214acb7dfe","ts":1785574800803,"by":"planilla","ty":"ffecha","f":"548f1286-6085-41fe-834f-aab3302cfb90","fecha":"2026-09-12","hora":"","costo":0,"nota":""},{"id":"e7784d62-f9f8-4a76-b67e-f08e90c8e016","ts":1785574800804,"by":"planilla","ty":"ffecha","f":"548f1286-6085-41fe-834f-aab3302cfb90","fecha":"2026-09-13","hora":"","costo":0,"nota":""},{"id":"efeb68bd-c3d7-4e59-a6ee-acb653d8d514","ts":1785574800805,"by":"planilla","ty":"ffecha","f":"548f1286-6085-41fe-834f-aab3302cfb90","fecha":"2026-10-03","hora":"","costo":0,"nota":""},{"id":"c6718512-5bdb-4be7-9ab0-e771b9701604","ts":1785574800806,"by":"planilla","ty":"ffecha","f":"548f1286-6085-41fe-834f-aab3302cfb90","fecha":"2026-10-04","hora":"","costo":0,"nota":""},{"id":"339ca68a-83fe-4d03-ba43-f6cd52dfce11","ts":1785574800807,"by":"planilla","ty":"ffecha","f":"548f1286-6085-41fe-834f-aab3302cfb90","fecha":"2026-10-10","hora":"","costo":0,"nota":""},{"id":"7cc2fe68-f200-47af-962d-9f52c361ee8f","ts":1785574800808,"by":"planilla","ty":"ffecha","f":"548f1286-6085-41fe-834f-aab3302cfb90","fecha":"2026-10-11","hora":"","costo":0,"nota":""},{"id":"b97426fd-5bcc-427c-8592-772687d5d996","ts":1785574800809,"by":"planilla","ty":"ffecha","f":"548f1286-6085-41fe-834f-aab3302cfb90","fecha":"2026-11-07","hora":"","costo":0,"nota":""},{"id":"f8f59dde-0605-4bc1-be61-31c20e404a99","ts":1785574800810,"by":"planilla","ty":"ffecha","f":"548f1286-6085-41fe-834f-aab3302cfb90","fecha":"2026-11-08","hora":"","costo":0,"nota":""},{"id":"b6deccfb-1ecf-4e4d-a230-9f2c3bd3d2c0","ts":1785574800811,"by":"planilla","ty":"ffecha","f":"548f1286-6085-41fe-834f-aab3302cfb90","fecha":"2026-12-05","hora":"","costo":0,"nota":""},{"id":"2c8acd69-5230-45c4-b611-a73dfe2781dd","ts":1785574800812,"by":"planilla","ty":"ffecha","f":"548f1286-6085-41fe-834f-aab3302cfb90","fecha":"2026-12-06","hora":"","costo":0,"nota":""},{"id":"6a73fe48-c43c-440c-bfef-a2f857ccd697","ts":1785574800813,"by":"planilla","ty":"ffecha","f":"548f1286-6085-41fe-834f-aab3302cfb90","fecha":"2026-12-19","hora":"","costo":0,"nota":""},{"id":"7051b30b-f74b-49ae-b741-ffba8dd028f9","ts":1785574800814,"by":"planilla","ty":"ffecha","f":"548f1286-6085-41fe-834f-aab3302cfb90","fecha":"2026-12-20","hora":"","costo":0,"nota":""},{"id":"b975479c-edf0-42b2-bac5-b4dc6c79eae0","ts":1785574800900,"by":"planilla","ty":"feria","nombre":"Grand Market","ubic":"Pueblo Caamaño, Pilar","costo":0,"costoTxt":"","tel":"","mail":"grandmarketopen@gmail.com","contacto":"grandmarketopen@gmail.com","link":"https://www.instagram.com/grandmarketopen/","nota":"Re contra si.","hora":"","estado":"postulados"},{"id":"f561e591-4c76-4b79-9a1c-27206926e22d","ts":1785574800901,"by":"planilla","ty":"ffecha","f":"b975479c-edf0-42b2-bac5-b4dc6c79eae0","fecha":"2026-09-05","hora":"","costo":0,"nota":""},{"id":"a822c59e-68d1-41a6-8193-7ee8c6f03899","ts":1785574800902,"by":"planilla","ty":"ffecha","f":"b975479c-edf0-42b2-bac5-b4dc6c79eae0","fecha":"2026-09-06","hora":"","costo":0,"nota":""},{"id":"6056d313-63a0-4b73-8d9b-2f27a9bcc854","ts":1785574801000,"by":"planilla","ty":"feria","nombre":"Feria Makers","ubic":"Colegio Marin. Av Libertador 17115 San Isidro","costo":0,"costoTxt":"","tel":"","mail":"feriamakers@gmail.com","contacto":"DM IG o feriamakers@gmail.com","link":"https://www.instagram.com/feriamakers/","nota":"Me gusto · Fecha: Septiembre 13-18hs","hora":"13-18 hs","estado":"postulados"},{"id":"0e19884d-2c74-4731-a8fc-5f3247e12042","ts":1785574801100,"by":"planilla","ty":"feria","nombre":"Las tertulias","ubic":"Barrio chino - Echeverria 1664","costo":0,"costoTxt":"","tel":"","mail":"","contacto":"https://docs.google.com/forms/d/e/1FAIpQLSftgRZk1Fio2EHZiLo_fgyJOzauGwaZWoXBWib0SCSrxx7qsQ/viewform","link":"https://www.instagram.com/lastertuliasferia/","nota":"Se puede compartir stand","hora":"13-18 hs","estado":"postulados"},{"id":"4b8a785b-326e-4c37-b9c0-d3d4f237dd6e","ts":1785574801101,"by":"planilla","ty":"ffecha","f":"0e19884d-2c74-4731-a8fc-5f3247e12042","fecha":"2026-07-18","hora":"13-18 hs","costo":0,"nota":""},{"id":"cd1ca697-e932-4e4f-9bc7-2ddfcd782ac1","ts":1785574801102,"by":"planilla","ty":"ffecha","f":"0e19884d-2c74-4731-a8fc-5f3247e12042","fecha":"2026-07-20","hora":"13-18 hs","costo":0,"nota":""},{"id":"442ba74b-d160-4d56-8bbe-48c8587c5ecc","ts":1785574801103,"by":"planilla","ty":"ffecha","f":"0e19884d-2c74-4731-a8fc-5f3247e12042","fecha":"2026-07-25","hora":"13-18 hs","costo":0,"nota":""},{"id":"5da19832-a10b-4c57-8c83-8beb39f9ccb2","ts":1785574801104,"by":"planilla","ty":"ffecha","f":"0e19884d-2c74-4731-a8fc-5f3247e12042","fecha":"2026-07-27","hora":"13-18 hs","costo":0,"nota":""},{"id":"aa1da492-2683-4b26-b6e5-191fb4377bb6","ts":1785574801200,"by":"planilla","ty":"feria","nombre":"Agronomia","ubic":"Facultad de Agronomia","costo":0,"costoTxt":"","tel":"","mail":"","contacto":"https://docs.google.com/forms/d/e/1FAIpQLScRlib1yacu9yBrcZjxCdJbMeqhdr_uPG9O5WdaEK_vvXTGQA/viewform","link":"https://www.instagram.com/feriaagronomia/","nota":"Fecha: Segundo finde de cada mes","hora":"","estado":"postulados"},{"id":"d2c973f2-878d-4987-9ac1-8b4cb77c202b","ts":1785574801300,"by":"planilla","ty":"feria","nombre":"Habana","ubic":"Habana 2944, Villa Pueyrredon","costo":0,"costoTxt":"","tel":"","mail":"","contacto":"","link":"https://www.instagram.com/ferias_emprendedores/","nota":"No me parecio muy buena","hora":"","estado":"descartada"},{"id":"dcfdb359-9bd5-4546-82dd-1b1bc7e3fd7b","ts":1785574801301,"by":"planilla","ty":"ffecha","f":"d2c973f2-878d-4987-9ac1-8b4cb77c202b","fecha":"2026-07-18","hora":"","costo":0,"nota":""},{"id":"bb765c8c-e614-407c-b375-aed762baf437","ts":1785574801302,"by":"planilla","ty":"ffecha","f":"d2c973f2-878d-4987-9ac1-8b4cb77c202b","fecha":"2026-07-19","hora":"","costo":0,"nota":""},{"id":"ba95c15e-0f7f-40cc-9287-6791b83b5840","ts":1785574801400,"by":"planilla","ty":"feria","nombre":"Parque Saavedra","ubic":"Av gracia del rio y roque perez","costo":0,"costoTxt":"","tel":"","mail":"","contacto":"","link":"https://www.instagram.com/feriaparquesaavedracaba/","nota":"Creo que es igual a Plaza Francia · Fecha: Fines de semana","hora":"","estado":"anotada"},{"id":"8679e7ba-c079-42fd-a301-c3a0f75e7c97","ts":1785574801500,"by":"planilla","ty":"feria","nombre":"Feria Armenia","ubic":"","costo":0,"costoTxt":"","tel":"11 62235907","mail":"","contacto":"Karina - 11 62235907","link":"","nota":"","hora":"","estado":"anotada"},{"id":"a30f6020-44a3-467a-b404-39a4683d8ea1","ts":1785574801600,"by":"planilla","ty":"feria","nombre":"Espacio Orden Natural","ubic":"Plaza Irlanda Caballito","costo":0,"costoTxt":"","tel":"","mail":"","contacto":"","link":"https://www.instagram.com/espacio.orden.natural/","nota":"","hora":"","estado":"anotada"},{"id":"3685c2fb-faf3-4a52-9a57-e30eeeaf0870","ts":1785574801700,"by":"planilla","ty":"feria","nombre":"Warmichella","ubic":"Parque Nautico San Fernando","costo":0,"costoTxt":"","tel":"","mail":"","contacto":"","link":"","nota":"","hora":"","estado":"anotada"},{"id":"6ebdb78d-b0ab-47cb-a8d1-530cedcb6d5b","ts":1785574801701,"by":"planilla","ty":"ffecha","f":"3685c2fb-faf3-4a52-9a57-e30eeeaf0870","fecha":"2026-12-12","hora":"","costo":0,"nota":""},{"id":"7323f1d6-5e6c-4e71-b2d2-c26fca8405f6","ts":1785574801702,"by":"planilla","ty":"ffecha","f":"3685c2fb-faf3-4a52-9a57-e30eeeaf0870","fecha":"2026-12-13","hora":"","costo":0,"nota":""},{"id":"cdccf52e-870b-4506-a29e-84e08adb299a","ts":1785574801800,"by":"planilla","ty":"feria","nombre":"Feria navideña de parque Rivadavia","ubic":"Pque Rivadavia","costo":0,"costoTxt":"","tel":"","mail":"","contacto":"","link":"https://www.instagram.com/rivadavia.ciudad/","nota":"La organiza Desarrollo Humano · Fecha: Mediados de Diciembre","hora":"","estado":"anotada"},{"id":"5c252597-8f67-4de5-b654-ca2c8111aa25","ts":1785574801900,"by":"planilla","ty":"feria","nombre":"Feria Espacio de Diseño","ubic":"Fuimos al Bar Gluck","costo":0,"costoTxt":"","tel":"","mail":"","contacto":"","link":"","nota":"Fuimos el 6/7/2025 y fue pesima","hora":"","estado":"anotada"},{"id":"1414b903-c0c9-4923-b29c-41558aa3081e","ts":1785574802000,"by":"planilla","ty":"feria","nombre":"Manuel Belgrano","ubic":"","costo":0,"costoTxt":"","tel":"1170580332","mail":"vocaliadesolidaridad@cmb.org.ar","contacto":"1170580332 vocaliadesolidaridad@cmb.org.ar","link":"","nota":"","hora":"","estado":"anotada"},{"id":"7bdb6a99-b843-4b9c-a300-e31d051ba085","ts":1785574802100,"by":"planilla","ty":"feria","nombre":"Colegio Champagnat","ubic":"","costo":0,"costoTxt":"","tel":"11 61995479","mail":"feriachampagnat@gmail.com","contacto":"Sheila Lanuse 11 61995479 feriachampagnat@gmail.com / feriaclubchampagnat@gmail.com","link":"","nota":"","hora":"","estado":"anotada"},{"id":"f1cfb99a-ecbc-4260-9178-e5576e956099","ts":1785574802200,"by":"planilla","ty":"feria","nombre":"CUBA Fátima","ubic":"Cuba Fatima","costo":0,"costoTxt":"","tel":"","mail":"feria@fundacioncuba.org.ar","contacto":"Ceci Nissen / feria@fundacioncuba.org.ar","link":"https://www.instagram.com/feriafundacioncuba/","nota":"","hora":"","estado":"anotada"},{"id":"f1163998-c23c-4aad-b347-c234f6e827ac","ts":1785574802300,"by":"planilla","ty":"feria","nombre":"CUBA Villa de Mayo","ubic":"Cuba Villa de Mayo","costo":0,"costoTxt":"","tel":"","mail":"feria@fundacioncuba.org.ar","contacto":"feria@fundacioncuba.org.ar","link":"https://www.instagram.com/feriafundacioncuba/","nota":"","hora":"","estado":"anotada"},{"id":"046c9784-19f6-4c91-a78e-21d4b898798a","ts":1785574802400,"by":"planilla","ty":"feria","nombre":"Feria BA","ubic":"Buenos Aires Cricket & Rugby Club. Calle René Favaloro 2500. Victoria. Pcia. de Buenos Aires.","costo":455000,"costoTxt":"455k","tel":"11 7608-4738","mail":"","contacto":"11 7608-4738","link":"https://www.instagram.com/feria.bacrc/","nota":"Pendiente de postulacion","hora":"10-19 hs","estado":"anotada"},{"id":"633572d0-1a36-4cd6-ac37-a4d390cbc771","ts":1785574802401,"by":"planilla","ty":"ffecha","f":"046c9784-19f6-4c91-a78e-21d4b898798a","fecha":"2026-11-07","hora":"10-19 hs","costo":0,"nota":""},{"id":"2bff20bd-7ae6-4413-a8d4-1e20e9d05c4d","ts":1785574802500,"by":"planilla","ty":"feria","nombre":"Club Hurlingham Kermese","ubic":"Av Julio Roca 1411 Hurlingham","costo":0,"costoTxt":"","tel":"1164929616","mail":"","contacto":"1164929616","link":"https://www.instagram.com/kermessehurlinghamabcc/","nota":"","hora":"","estado":"anotada"},{"id":"cb213df5-0427-4299-943d-158bde3dc5ba","ts":1785574802600,"by":"planilla","ty":"feria","nombre":"Newman","ubic":"","costo":0,"costoTxt":"","tel":"1169403612","mail":"","contacto":"Juan Salinas - 1169403612","link":"","nota":"","hora":"","estado":"anotada"},{"id":"1ec679fe-3c5b-45c7-9867-f6c656370d0b","ts":1785574802700,"by":"planilla","ty":"feria","nombre":"Feria San Pablo","ubic":"","costo":0,"costoTxt":"","tel":"1159272592","mail":"feriasanpabloc@gmail.com","contacto":"Vicky Freixas 1159272592 / 1138070114 feriasanpabloc@gmail.com","link":"https://www.instagram.com/feria_san_pablo/","nota":"Tdv no subio nada · Fecha: Dia de semana","hora":"","estado":"anotada"},{"id":"e30f8f40-15f5-496a-a399-e2cf82d95c62","ts":1785574802800,"by":"planilla","ty":"feria","nombre":"Feria Socorro","ubic":"Parroquia Nuestra Señora del Socorro – Juncal 876","costo":0,"costoTxt":"","tel":"1131930275","mail":"ferianavidadsocorro@gmail.com","contacto":"Angie Ezcurra / Florencia Mounaretto        1131930275 / 115284022        ferianavidadsocorro@gmail.com","link":"https://www.instagram.com/feria.denavidaddelsocorro/","nota":"Active las notificaciones para que nos llegue cuando suben algo · Fecha: Tdv no hay","hora":"","estado":"anotada"},{"id":"122d8155-fa6e-4778-a6e9-e4339da12b14","ts":1785574802900,"by":"planilla","ty":"feria","nombre":"Feria SMT","ubic":"","costo":0,"costoTxt":"","tel":"","mail":"feriadenavidad@smt.edu.ar","contacto":"feriadenavidad@smt.edu.ar","link":"https://www.instagram.com/feria_de_navidad_smt/","nota":"Fecha: Tdv no hay","hora":"","estado":"anotada"},{"id":"7fe194c3-cb07-4b9a-89b3-fefdc699fe26","ts":1785574803000,"by":"planilla","ty":"feria","nombre":"Feria San Miguel","ubic":"Colegio San Miguel. Larrea 1254","costo":0,"costoTxt":"","tel":"1156157826","mail":"feriacolegiosanmigual2025@gmail.c","contacto":"Clara / Alice Arriola 1156157826 feriacolegiosanmigual2025@gmail.c om","link":"https://www.instagram.com/feria_col_sanmiguel/","nota":"Fecha: Tdv no hay","hora":"","estado":"anotada"},{"id":"ea7046e4-06c2-433e-b36f-d8528077231e","ts":1785574803100,"by":"planilla","ty":"feria","nombre":"Feria Santa Teresa","ubic":"","costo":0,"costoTxt":"","tel":"","mail":"","contacto":"","link":"","nota":"Hablar con Dodo","hora":"","estado":"anotada"},{"id":"5a3f6fd4-e2f7-46a8-ab87-a04b0543aed3","ts":1785574803200,"by":"planilla","ty":"feria","nombre":"Feria de navidad en las Caballerizas.","ubic":"Talar de Pacheco. Cabildo 480, Gral. Pacheco, Tigre","costo":440000,"costoTxt":"440k-1,5m","tel":"","mail":"","contacto":"","link":"https://www.instagram.com/ferianavidadmdg/","nota":"Puede ser muy buena, es muy cara. Es literalmente nuestro target de gente","hora":"","estado":"anotada"},{"id":"d60c8e46-2765-4986-8a76-cd2e3e048519","ts":1785574803201,"by":"planilla","ty":"ffecha","f":"5a3f6fd4-e2f7-46a8-ab87-a04b0543aed3","fecha":"2026-11-27","hora":"","costo":0,"nota":""},{"id":"f43ceaa8-ca70-4591-99e2-449381272885","ts":1785574803202,"by":"planilla","ty":"ffecha","f":"5a3f6fd4-e2f7-46a8-ab87-a04b0543aed3","fecha":"2026-11-28","hora":"","costo":0,"nota":""},{"id":"f4b5b6e5-c78b-4635-b473-25c4e7ee5b89","ts":1785574803203,"by":"planilla","ty":"ffecha","f":"5a3f6fd4-e2f7-46a8-ab87-a04b0543aed3","fecha":"2026-11-29","hora":"","costo":0,"nota":""},{"id":"0440d75c-b4f0-4d83-b6b2-7cc46970f24a","ts":1785574803300,"by":"planilla","ty":"feria","nombre":"Feria de navidad del Santuario","ubic":"Santuario de Schoenstatt, San Isidro","costo":0,"costoTxt":"","tel":"","mail":"","contacto":"","link":"","nota":"Tdv no subio nada","hora":"","estado":"anotada"}]};
 
 /* ============ utilidades ============ */
 const $ = s => document.querySelector(s);
@@ -390,6 +423,16 @@ const $$ = s => [...document.querySelectorAll(s)];
 const money = n => '$' + Math.round(n).toLocaleString('es-AR');
 const mts = n => (Math.round(n*10)/10).toLocaleString('es-AR') + ' m';
 const KEY = 'inspiracion_stock_v2';
+const EST = [
+  {k:'anotada',    n:'Anotada',    c:'#C4B7A4', d:'La conocemos, sin gestión todavía'},
+  {k:'contactada', n:'Contactada', c:'#C79A3B', d:'Escribimos, esperando respuesta'},
+  {k:'postulados', n:'Postulados', c:'#6E8196', d:'Nos postulamos formalmente'},
+  {k:'aceptados',  n:'Aceptados',  c:'#7A8C63', d:'Nos aceptaron, falta pagar'},
+  {k:'pagada',     n:'Pagada',     c:'#2F4A3F', d:'Confirmada y paga, vamos'},
+  {k:'hecha',      n:'Hecha',      c:'#46332B', d:'Ya fuimos'},
+  {k:'descartada', n:'Descartada', c:'#D0C3AE', d:'Evaluada y no vamos'}
+];
+const estInfo = k => EST.find(x => x.k === k) || EST[0];
 const CHANNELS = ['Feria','Tienda Nube','Pedidos / encargos','Amigos y familia'];
 const norm = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
@@ -410,6 +453,11 @@ const prettyDate = iso => {
 const prettyMonth = ym => {
   const [y,m] = ym.split('-').map(Number);
   return capit(new Date(y, m-1, 1).toLocaleDateString('es-AR',{month:'long', year:'numeric'}));
+};
+const shiftDays = (iso, n) => {
+  const [y,m,d] = iso.split('-').map(Number);
+  const dt = new Date(y, m-1, d+n);
+  return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
 };
 const shiftMonth = (ym, n) => {
   const [y,m] = ym.split('-').map(Number);
@@ -499,6 +547,7 @@ function derive(){
     patch[o.t] = Object.assign(patch[o.t] || {}, o.patch); });
 
   const stock = {}, ventas = [], jor = {}, customs = [], prices = {}, prod = [];
+  const fer = {}, ffe = [];
   OPS.forEach(o => {
     if (voided.has(o.id) || o.ty === 'void' || o.ty === 'edit') return;
     const p = patch[o.id] || {};
@@ -520,6 +569,7 @@ function derive(){
       ventas.push(v);
     }
     else if (o.ty === 'jopen') jor[o.id] = {id:o.id, ts:o.ts, by:o.by,
+      fer: p.fer !== undefined ? p.fer : o.fer,
       nombre: p.nombre || o.nombre, canal: p.canal || o.canal,
       fecha: p.fecha || o.fecha, nota: p.nota != null ? p.nota : (o.nota || ''),
       monto: p.monto != null ? p.monto : (o.monto || 0),
@@ -530,6 +580,8 @@ function derive(){
         nota: p.nota != null ? p.nota : (o.nota || ''), monto: p.monto || 0,
         cerrada:true, ventas:[], ids:o.ids};
     }
+    else if (o.ty === 'feria') fer[o.id] = Object.assign({}, o, p, {id:o.id, fechas:[]});
+    else if (o.ty === 'ffecha') ffe.push(Object.assign({}, o, p, {id:o.id}));
     else if (o.ty === 'var')   customs.push(o);
     else if (o.ty === 'price') prices[fixKey(o.k)] = p.p != null ? p.p : o.p;
   });
@@ -545,7 +597,12 @@ function derive(){
   const cerradas = lista.filter(j => j.cerrada)
     .sort((a,b) => (b.fecha||'').localeCompare(a.fecha||'') || b.ts - a.ts);
 
-  D = {stock, ventas, jor, abiertas, cerradas, sueltas, customs, prices, prod};
+  ffe.forEach(x => { const f = fer[x.f]; if (f) f.fechas.push(x); });
+  Object.values(fer).forEach(f => f.fechas.sort((a,b) => (a.fecha||'').localeCompare(b.fecha||'')));
+
+  D = {stock, ventas, jor, abiertas, cerradas, sueltas, customs, prices, prod,
+       ferias: fer, ffechas: ffe,
+       feriasOrd: Object.values(fer).sort((a,b) => (a.nombre||'').localeCompare(b.nombre||'', 'es'))};
   if (!abiertas.find(j => j.id === LOCAL.jor)) LOCAL.jor = abiertas.length ? abiertas[0].id : null;
   buildVariants();
 }
@@ -664,8 +721,10 @@ $$('nav button').forEach(b => b.onclick = () => {
 });
 function applyTab(){
   $$('nav button').forEach(x => x.classList.toggle('on', x.dataset.tab === LOCAL.tab));
-  ['stock','ventas','mat','hist'].forEach(t => $('#t-'+t).classList.toggle('hide', t !== LOCAL.tab));
-  $('#fab').classList.toggle('hide', LOCAL.tab !== 'stock');
+  ['stock','ventas','ferias','mat','hist'].forEach(t => $('#t-'+t).classList.toggle('hide', t !== LOCAL.tab));
+  const f = $('#fab');
+  f.classList.toggle('hide', LOCAL.tab !== 'stock' && LOCAL.tab !== 'ferias');
+  f.lastChild.textContent = LOCAL.tab === 'ferias' ? ' Feria' : ' Variante';
 }
 $('#jbtn').onclick = () => {
   const j = jornActiva();
@@ -951,19 +1010,48 @@ function askDeleteSale(ids, u0, k, p0){
     });
 }
 function sheetNuevaJornada(){
+  const hoy = todayISO();
+  // fechas de feria de hoy y de los próximos 7 días, para sugerirlas arriba
+  const cerca = D.ffechas.filter(x => x.fecha >= hoy && x.fecha <= shiftDays(hoy, 7) && D.ferias[x.f])
+    .sort((a,b) => a.fecha.localeCompare(b.fecha)).slice(0, 6);
+  const otras = D.feriasOrd.filter(f => !cerca.find(x => x.f === f.id));
   sheet(`<h3>Nueva jornada</h3>
    <div class="tiny muted">Sirve para separar dos ferias del mismo día, o un pedido aparte.</div>
+   ${cerca.length ? `<div class="f"><label>Ferias de estos días</label>
+     <div class="chips" style="margin:0;padding:0 0 2px">
+       ${cerca.map(x => `<button class="chip sug" data-f="${x.f}" data-d="${x.fecha}">${esc(D.ferias[x.f].nombre)}<span class="n">${x.fecha === hoy ? 'hoy' : prettyDate(x.fecha).split(',')[0]}</span></button>`).join('')}
+     </div></div>` : ''}
    <div class="f"><label>Nombre</label><input id="jnn" placeholder="Ej.: Plaza Francia"></div>
+   <div class="f"><label>Feria (opcional)</label><select id="jnf">
+     <option value="">— sin feria —</option>
+     ${cerca.map(x => `<option value="${x.f}">${esc(D.ferias[x.f].nombre)} · ${prettyDate(x.fecha)}</option>`).join('')}
+     ${otras.map(f => `<option value="${f.id}">${esc(f.nombre)}</option>`).join('')}
+   </select></div>
    <div class="f"><label>Canal</label><select id="jnc">${CHANNELS.map(c => `<option>${esc(c)}</option>`).join('')}</select></div>
-   <div class="f"><label>Fecha</label><input id="jnf" type="date" value="${todayISO()}"></div>
+   <div class="f"><label>Fecha</label><input id="jnf2" type="date" value="${hoy}"></div>
    <div class="f"><button class="btn pri">Crear y usar</button></div>`,
   () => {
     const n = $('#jnn').value.trim();
     if (!n){ toast('Falta el nombre'); return; }
-    nuevaJornada(n, $('#jnc').value, $('#jnf').value || todayISO());
+    const o = addOp({ty:'jopen', nombre:n, canal:$('#jnc').value,
+                     fecha: $('#jnf2').value || hoy, fer: $('#jnf').value || null});
+    LOCAL.jor = o.id; saveLocal();
     closeSheet(); render(); toast('<b>' + esc(n) + '</b> · jornada abierta');
   });
-  setTimeout(() => $('#jnn').focus(), 120);
+  const pintar = () => {
+    const id = $('#jnf').value, fe = D.ferias[id];
+    if (fe && !$('#jnn').value.trim()) $('#jnn').value = fe.nombre;
+    if (fe) $('#jnc').value = 'Feria';
+  };
+  $('#jnf').onchange = pintar;
+  $$('.sheet .chip.sug').forEach(b => b.onclick = () => {
+    $('#jnf').value = b.dataset.f;
+    $('#jnf2').value = b.dataset.d;
+    $('#jnn').value = D.ferias[b.dataset.f].nombre;
+    $('#jnc').value = 'Feria';
+    $$('.sheet .chip.sug').forEach(x => x.classList.toggle('on', x === b));
+  });
+  setTimeout(() => { if (!cerca.length) $('#jnn').focus(); }, 120);
 }
 function cerrarJornada(j){
   if (!j) return;
@@ -1059,13 +1147,18 @@ function editJornada(id){
    <div class="f"><label>Canal</label><select id="ejc">${CHANNELS.map(c => `<option ${c===j.canal?'selected':''}>${esc(c)}</option>`).join('')}</select></div>
    <div class="f"><label>Fecha</label><input id="ejd" type="date" value="${esc(j.fecha)}"></div>
    <div class="f"><label>Nota / descripción</label><input id="ejnota" value="${esc(j.nota||'')}"></div>
+   <div class="f"><label>Feria</label><select id="ejfer">
+     <option value="">— sin feria —</option>
+     ${D.feriasOrd.map(f => `<option value="${f.id}" ${f.id===j.fer?'selected':''}>${esc(f.nombre)}</option>`).join('')}
+   </select></div>
    ${j.monto ? `<div class="f"><label>Importe sin desglosar</label><input id="ejm" inputmode="numeric" value="${j.monto}"></div>` : ''}
    <div class="f"><label class="chk"><input type="checkbox" id="ejab">Volver a abrirla</label></div>
    <div class="f"><button class="btn pri">Guardar</button></div>
    <div class="f"><button class="btn gh danger" id="delj2">Eliminar la jornada</button></div>`,
   () => {
     const patch = {nombre: $('#ejn2').value.trim() || j.nombre, canal: $('#ejc').value,
-                   fecha: $('#ejd').value || j.fecha, nota: $('#ejnota').value.trim()};
+                   fecha: $('#ejd').value || j.fecha, nota: $('#ejnota').value.trim(),
+                   fer: $('#ejfer').value || null};
     if ($('#ejm')) patch.monto = parseInt(($('#ejm').value||'0').replace(/\D/g,''),10) || 0;
     if ($('#ejab').checked) patch.cerrada = false;
     addOp({ty:'edit', t:j.id, patch});
@@ -1225,8 +1318,287 @@ function detalleMaterial(g, modo){
   });
 }
 
+
+/* ============ FERIAS ============ */
+let FMES = monthOf(Date.now());
+const hoyISO = () => todayISO();
+const dias = ['L','M','M','J','V','S','D'];
+
+function costoDe(fe, fx){ return (fx && fx.costo) || fe.costo || 0; }
+function jornadasDe(fid, fecha){
+  const todas = D.cerradas.concat(D.abiertas);
+  return todas.filter(j => j.fer === fid && (!fecha || j.fecha === fecha));
+}
+function balanceFeria(fe){
+  let vend = 0, costo = 0, veces = 0;
+  fe.fechas.forEach(fx => {
+    const js = jornadasDe(fe.id, fx.fecha);
+    if (js.length){ veces++; vend += js.reduce((a,j) => a + totJ(j), 0); costo += costoDe(fe, fx); }
+  });
+  // jornadas asociadas a la feria sin fecha coincidente
+  jornadasDe(fe.id).forEach(j => { if (!fe.fechas.find(fx => fx.fecha === j.fecha)) vend += totJ(j); });
+  return {vend, costo, neto: vend - costo, veces};
+}
+
+function renderFerias(){
+  const modo = LOCAL.fmodo || 'cal';
+  $('#t-ferias').innerHTML = modo === 'cal' ? vistaCalendario() : vistaDirectorio();
+  bindFerias();
+}
+
+/* ---- calendario + agenda ---- */
+function vistaCalendario(){
+  const [y, m] = FMES.split('-').map(Number);
+  const primero = new Date(y, m-1, 1);
+  const offset = (primero.getDay() + 6) % 7;             // lunes = 0
+  const largo = new Date(y, m, 0).getDate();
+
+  // fechas del mes agrupadas por día
+  const porDia = {};
+  D.ffechas.forEach(fx => {
+    if (!fx.fecha || fx.fecha.slice(0,7) !== FMES) return;
+    const fe = D.ferias[fx.f]; if (!fe) return;
+    if (fe.estado === 'descartada' && !LOCAL.fdesc) return;
+    (porDia[+fx.fecha.slice(8,10)] = porDia[+fx.fecha.slice(8,10)] || []).push({fx, fe});
+  });
+  const delMes = Object.keys(porDia).map(Number).sort((a,b) => a-b);
+  const sel = LOCAL.fdia && LOCAL.fdia.slice(0,7) === FMES ? +LOCAL.fdia.slice(8,10) : 0;
+
+  let celdas = '';
+  for (let i = 0; i < offset; i++) celdas += '<div class="cd out"></div>';
+  for (let d = 1; d <= largo; d++){
+    const hoy = FMES + '-' + String(d).padStart(2,'0') === hoyISO();
+    const items = porDia[d] || [];
+    celdas += `<div class="cd ${items.length?'has':''} ${sel===d?'sel':''} ${hoy?'hoy':''}" data-d="${d}">
+      <span>${d}</span>
+      <i>${items.slice(0,3).map(x => `<b style="background:${estInfo(x.fe.estado).c}"></b>`).join('')}</i>
+    </div>`;
+  }
+
+  const lista = sel ? (porDia[sel] || []) : delMes.flatMap(d => porDia[d]);
+  const totalMes = delMes.reduce((a,d) => a + porDia[d].length, 0);
+
+  return `
+  <div class="seg" style="margin-bottom:12px">
+    <button data-f="cal" class="on">Calendario</button>
+    <button data-f="dir">Todas las ferias</button>
+  </div>
+  <div class="mnav">
+    <button id="fprev">‹</button>
+    <div class="lb">${prettyMonth(FMES)}</div>
+    <button id="fnext">›</button>
+  </div>
+  <div class="cal">
+    <div class="ch">${dias.map(x => `<span>${x}</span>`).join('')}</div>
+    <div class="cg">${celdas}</div>
+  </div>
+  <div class="subrow" style="padding:4px 2px 10px">
+    <label class="tgl"><input type="checkbox" id="fdesc" ${LOCAL.fdesc?'checked':''}> Ver descartadas</label>
+    <span class="tiny muted" style="margin-left:auto">${totalMes ? totalMes + ' fecha' + (totalMes===1?'':'s') : 'sin ferias'}</span>
+    ${sel ? `<button class="tiny" id="verTodo" style="color:var(--terra)">Todo el mes</button>` : ''}
+  </div>
+  ${lista.map(x => tarjetaFecha(x.fe, x.fx)).join('')}
+  ${!lista.length && totalMes ? '<div class="tiny muted" style="padding:14px 3px">No hay ferias ese día.</div>' : ''}
+  ${!totalMes ? `<div class="empty"><img src="${LOGO}"><div>No hay ferias agendadas en ${prettyMonth(FMES).toLowerCase()}.<br><span class="tiny">Con el botón <b>+ Feria</b> se agrega una.</span></div></div>` : ''}`;
+}
+
+function tarjetaFecha(fe, fx){
+  const e = estInfo(fe.estado);
+  const js = jornadasDe(fe.id, fx.fecha);
+  const vend = js.reduce((a,j) => a + totJ(j), 0);
+  const costo = costoDe(fe, fx);
+  const pasada = fx.fecha < hoyISO();
+  return `<div class="card fcard" data-fe="${fe.id}">
+    <div class="fc-l" style="background:${e.c}"></div>
+    <div class="fc-b">
+      <div class="row" style="align-items:flex-start">
+        <div style="flex:1;min-width:0">
+          <div class="fc-n">${esc(fe.nombre)}</div>
+          <div class="fc-d">${prettyDate(fx.fecha)}${fx.hora?' · '+esc(fx.hora):''}</div>
+          ${fe.ubic?`<div class="fc-u">${esc(fe.ubic)}</div>`:''}
+        </div>
+        <span class="est" style="background:${e.c}20;color:${e.c === '#D0C3AE' ? '#8A7561' : e.c}">${e.n}</span>
+      </div>
+      <div class="fc-f">
+        ${costo?`<span>Puesto · ${money(costo)}${(!fx.costo && fe.costo)?' aprox.':''}</span>`:''}
+        ${vend?`<span class="ok">Vendido · ${money(vend)}</span>`:''}
+        ${vend&&costo?`<span class="${vend-costo>=0?'ok':'bad'}">Neto · ${money(vend-costo)}</span>`:''}
+        ${!vend&&pasada?`<span class="muted">Sin ventas cargadas</span>`:''}
+      </div>
+    </div></div>`;
+}
+
+/* ---- directorio ---- */
+function vistaDirectorio(){
+  const filtro = LOCAL.fest || '';
+  const cuenta = {};
+  D.feriasOrd.forEach(f => cuenta[f.estado] = (cuenta[f.estado] || 0) + 1);
+  const lista = filtro ? D.feriasOrd.filter(f => f.estado === filtro) : D.feriasOrd;
+  return `
+  <div class="seg" style="margin-bottom:12px">
+    <button data-f="cal">Calendario</button>
+    <button data-f="dir" class="on">Todas las ferias</button>
+  </div>
+  <div class="chips" id="festados">
+    <button class="chip ${filtro?'':'on'}" data-e="">Todas<span class="n">${D.feriasOrd.length}</span></button>
+    ${EST.filter(e => cuenta[e.k]).map(e => `<button class="chip ${filtro===e.k?'on':''}" data-e="${e.k}">${e.n}<span class="n">${cuenta[e.k]}</span></button>`).join('')}
+  </div>
+  <div style="height:12px"></div>
+  ${lista.map(fe => {
+     const e = estInfo(fe.estado), b = balanceFeria(fe);
+     const prox = fe.fechas.filter(x => x.fecha >= hoyISO())[0];
+     return `<div class="card fcard" data-fe="${fe.id}">
+       <div class="fc-l" style="background:${e.c}"></div>
+       <div class="fc-b">
+         <div class="row" style="align-items:flex-start">
+           <div style="flex:1;min-width:0">
+             <div class="fc-n">${esc(fe.nombre)}</div>
+             ${fe.ubic?`<div class="fc-u">${esc(fe.ubic)}</div>`:''}
+             <div class="fc-d">${prox ? 'Próxima · ' + prettyDate(prox.fecha)
+                : (fe.fechas.length ? 'Última · ' + prettyDate(fe.fechas[fe.fechas.length-1].fecha) : 'Sin fecha definida')}</div>
+           </div>
+           <span class="est" style="background:${e.c}20;color:${e.c === '#D0C3AE' ? '#8A7561' : e.c}">${e.n}</span>
+         </div>
+         <div class="fc-f">
+           ${fe.costoTxt?`<span>Puesto · ${esc(fe.costoTxt)}</span>`:(fe.costo?`<span>Puesto · ${money(fe.costo)}</span>`:'')}
+           ${b.veces?`<span class="ok">${b.veces} vez${b.veces===1?'':'es'} · neto ${money(b.neto)}</span>`:''}
+         </div>
+       </div></div>`;
+  }).join('') || `<div class="empty"><img src="${LOGO}"><div>No hay ferias con ese estado.</div></div>`}`;
+}
+
+function bindFerias(){
+  $$('#t-ferias .seg button').forEach(b => b.onclick = () => {
+    LOCAL.fmodo = b.dataset.f; saveLocal(); renderFerias(); });
+  $$('#t-ferias .chip').forEach(b => b.onclick = () => {
+    LOCAL.fest = b.dataset.e; saveLocal(); renderFerias(); });
+  $$('#t-ferias .fcard').forEach(el => el.onclick = () => fichaFeria(el.dataset.fe));
+  if ($('#fprev')) $('#fprev').onclick = () => { FMES = shiftMonth(FMES,-1); LOCAL.fdia=''; renderFerias(); };
+  if ($('#fnext')) $('#fnext').onclick = () => { FMES = shiftMonth(FMES, 1); LOCAL.fdia=''; renderFerias(); };
+  if ($('#verTodo')) $('#verTodo').onclick = () => { LOCAL.fdia=''; saveLocal(); renderFerias(); };
+  if ($('#fdesc')) $('#fdesc').onchange = e => { LOCAL.fdesc = e.target.checked; saveLocal(); renderFerias(); };
+  $$('#t-ferias .cd[data-d]').forEach(el => el.onclick = () => {
+    const d = FMES + '-' + String(el.dataset.d).padStart(2,'0');
+    LOCAL.fdia = (LOCAL.fdia === d) ? '' : d; saveLocal(); renderFerias();
+  });
+}
+
+/* ---- ficha de una feria ---- */
+function fichaFeria(id){
+  const fe = D.ferias[id]; if (!fe) return;
+  const e = estInfo(fe.estado), b = balanceFeria(fe);
+  const tel = (fe.tel||'').replace(/\D/g,'');
+  sheet(`<h3>${esc(fe.nombre)}</h3>
+   <div class="row" style="gap:7px;margin-top:6px">
+     <span class="est" style="background:${e.c}20;color:${e.c==='#D0C3AE'?'#8A7561':e.c}">${e.n}</span>
+     <span class="tiny muted">${esc(e.d)}</span>
+   </div>
+   ${fe.ubic?`<div class="f"><label>Dónde</label><div>${esc(fe.ubic)}</div></div>`:''}
+   ${(fe.costoTxt||fe.costo)?`<div class="f"><label>Costo del puesto</label><div>${esc(fe.costoTxt || money(fe.costo))}</div></div>`:''}
+   ${b.veces?`<div class="f"><label>Resultado histórico</label>
+      <div class="card pad">
+        <div class="kpi"><span>Fuimos</span><b>${b.veces} vez${b.veces===1?'':'es'}</b></div>
+        <div class="kpi"><span>Vendido</span><b>${money(b.vend)}</b></div>
+        <div class="kpi"><span>Costo de puesto</span><b>−${money(b.costo)}</b></div>
+        <div class="kpi tot"><span>Neto</span><b style="color:${b.neto>=0?'var(--ok)':'var(--terra)'}">${money(b.neto)}</b></div>
+        ${b.veces>1?`<div class="tiny muted" style="margin-top:6px">Promedio por edición: ${money(b.neto/b.veces)}</div>`:''}
+      </div></div>`:''}
+   ${(tel||fe.mail||fe.link)?`<div class="f"><label>Contacto</label><div class="row" style="flex-wrap:wrap;gap:7px">
+      ${tel?`<a class="lnk" href="https://wa.me/${tel.length>10?tel:'54'+tel}" target="_blank">WhatsApp</a>
+             <a class="lnk" href="tel:${esc(fe.tel)}">Llamar</a>`:''}
+      ${fe.mail?`<a class="lnk" href="mailto:${esc(fe.mail)}">${esc(fe.mail)}</a>`:''}
+      ${fe.link?`<a class="lnk" href="${esc(fe.link)}" target="_blank">${/instagram/.test(fe.link)?'Instagram':'Link'}</a>`:''}
+   </div></div>`:''}
+   ${fe.contacto && !tel && !fe.mail?`<div class="f"><label>Contacto</label><div class="tiny">${esc(fe.contacto)}</div></div>`:''}
+   ${fe.nota?`<div class="f"><label>Notas</label><div class="tiny" style="line-height:1.55">${esc(fe.nota)}</div></div>`:''}
+   <div class="f"><label>Fechas</label>
+     <div class="card" style="padding:0 12px">
+       ${fe.fechas.length ? fe.fechas.map(fx => {
+          const js = jornadasDe(fe.id, fx.fecha);
+          const v = js.reduce((a,j)=>a+totJ(j),0);
+          return `<div class="vline"><div class="nm"><b>${prettyDate(fx.fecha)}</b>
+            <span>${fx.hora?esc(fx.hora)+' · ':''}${costoDe(fe,fx)?'puesto '+money(costoDe(fe,fx)):'sin costo cargado'}${v?' · vendido '+money(v):''}</span></div>
+            <button class="edfx" data-x="${fx.id}" style="color:var(--terra);font-size:12px">Editar</button></div>`;
+       }).join('') : '<div class="tiny muted" style="padding:13px 2px">Sin fechas cargadas.</div>'}
+     </div>
+   </div>
+   <div class="f"><button class="btn sec" id="addfx">+ Agregar fecha</button></div>
+   <div class="f"><button class="btn pri" id="edfe">Editar feria</button></div>
+   <div class="f"><button class="btn gh danger" id="delfe">Eliminar feria</button></div>`);
+  $('#addfx').onclick = () => editFecha(fe.id, null);
+  $$('.sheet .edfx').forEach(b => b.onclick = () => editFecha(fe.id, b.dataset.x));
+  $('#edfe').onclick = () => editFeria(fe.id);
+  $('#delfe').onclick = () => confirmSheet('¿Seguro?',
+    `Se va a eliminar <b>${esc(fe.nombre)}</b> y sus ${fe.fechas.length} fecha${fe.fechas.length===1?'':'s'}.<br>La acción no se puede deshacer.`,
+    'Eliminar', () => {
+      fe.fechas.forEach(fx => addOp({ty:'void', t:fx.id}));
+      addOp({ty:'void', t:fe.id});
+      closeSheet(); renderFerias(); toast('<b>Feria eliminada</b>');
+    });
+}
+
+/* ---- alta / edición de feria ---- */
+function editFeria(id){
+  const fe = id ? D.ferias[id] : {estado:'anotada'};
+  sheet(`<h3>${id?'Editar feria':'Nueva feria'}</h3>
+   <div class="f"><label>Nombre</label><input id="fn" value="${esc(fe.nombre||'')}" placeholder="Ej.: Plaza Francia"></div>
+   <div class="f"><label>Dónde</label><input id="fu" value="${esc(fe.ubic||'')}" placeholder="Dirección o lugar"></div>
+   <div class="f2">
+     <div class="f"><label>Costo del puesto</label><input id="fc" inputmode="numeric" value="${fe.costo||''}" placeholder="0"></div>
+     <div class="f"><label>Horario habitual</label><input id="fh" value="${esc(fe.hora||'')}" placeholder="13-18 hs"></div>
+   </div>
+   <div class="f"><label>Estado</label><select id="fe2">${EST.map(x => `<option value="${x.k}" ${x.k===fe.estado?'selected':''}>${x.n} — ${x.d}</option>`).join('')}</select></div>
+   <div class="f2">
+     <div class="f"><label>Teléfono</label><input id="ft" inputmode="tel" value="${esc(fe.tel||'')}" placeholder="11 1234-5678"></div>
+     <div class="f"><label>Mail</label><input id="fm" inputmode="email" value="${esc(fe.mail||'')}"></div>
+   </div>
+   <div class="f"><label>Link (Instagram, formulario)</label><input id="fl" value="${esc(fe.link||'')}"></div>
+   <div class="f"><label>Notas</label><input id="fno" value="${esc(fe.nota||'')}" placeholder="Ej.: necesitamos gazebo"></div>
+   <div class="f"><button class="btn pri">Guardar</button></div>`,
+  () => {
+    const datos = {nombre:$('#fn').value.trim(), ubic:$('#fu').value.trim(),
+      costo: parseInt(($('#fc').value||'0').replace(/\D/g,''),10)||0, costoTxt:'',
+      hora:$('#fh').value.trim(), estado:$('#fe2').value, tel:$('#ft').value.trim(),
+      mail:$('#fm').value.trim(), link:$('#fl').value.trim(), nota:$('#fno').value.trim()};
+    if (!datos.nombre){ toast('Falta el nombre'); return; }
+    if (id) addOp({ty:'edit', t:id, patch:datos});
+    else { const o = addOp(Object.assign({ty:'feria'}, datos)); closeSheet(); renderFerias();
+           toast('<b>' + esc(datos.nombre) + '</b> agregada'); editFecha(o.id, null); return; }
+    closeSheet(); renderFerias(); toast('<b>Feria actualizada</b>');
+  });
+  setTimeout(() => { if (!id) $('#fn').focus(); }, 120);
+}
+
+/* ---- alta / edición de una fecha ---- */
+function editFecha(fid, xid){
+  const fe = D.ferias[fid];
+  const fx = xid ? fe.fechas.find(x => x.id === xid) : {fecha: LOCAL.fdia || todayISO(), hora: fe.hora || ''};
+  sheet(`<h3>${xid?'Editar fecha':'Agregar fecha'}</h3>
+   <div class="tiny muted">${esc(fe.nombre)}</div>
+   <div class="f"><label>Fecha</label><input id="xf" type="date" value="${esc(fx.fecha||todayISO())}"></div>
+   <div class="f2">
+     <div class="f"><label>Horario</label><input id="xh" value="${esc(fx.hora||'')}" placeholder="13-18 hs"></div>
+     <div class="f"><label>Costo del puesto</label><input id="xc" inputmode="numeric" value="${fx.costo||''}" placeholder="${fe.costo||0}"></div>
+   </div>
+   <div class="f"><label>Nota de esta fecha</label><input id="xn" value="${esc(fx.nota||'')}" placeholder="Ej.: armado 13:15"></div>
+   <div class="f"><button class="btn pri">Guardar</button></div>
+   ${xid?`<div class="f"><button class="btn gh danger" id="delfx">Eliminar esta fecha</button></div>`:''}`,
+  () => {
+    const datos = {fecha:$('#xf').value || todayISO(), hora:$('#xh').value.trim(),
+      costo: parseInt(($('#xc').value||'0').replace(/\D/g,''),10)||0, nota:$('#xn').value.trim()};
+    if (xid) addOp({ty:'edit', t:xid, patch:datos});
+    else addOp(Object.assign({ty:'ffecha', f:fid}, datos));
+    FMES = datos.fecha.slice(0,7);
+    closeSheet(); renderFerias(); toast('<b>Fecha guardada</b>');
+  });
+  if ($('#delfx')) $('#delfx').onclick = () => confirmSheet('¿Seguro?',
+    `Se va a eliminar la fecha del <b>${prettyDate(fx.fecha)}</b> de ${esc(fe.nombre)}.`,
+    'Eliminar', () => { addOp({ty:'void', t:xid}); closeSheet(); renderFerias(); toast('<b>Fecha eliminada</b>'); });
+}
+
 /* ============ agregar variante ============ */
 $('#fab').onclick = () => {
+  if (LOCAL.tab === 'ferias'){ editFeria(null); return; }
   sheet(`<h3>Agregar variante</h3><div class="tiny muted">Para un producto que no figura en el catálogo.</div>
    <div class="f"><label>Categoría</label><select id="ac">${DATA.cats.map(x => `<option value="${x.id}" ${x.id===LOCAL.cat?'selected':''}>${esc(x.n)}</option>`).join('')}</select></div>
    <div class="f2"><div class="f"><label>Medida</label><input id="as" placeholder="Ej.: XXL"></div>
@@ -1322,7 +1694,18 @@ function restore(){
 
 
 /* ---- historial 2026 tomado de la planilla, se carga una sola vez ---- */
+function sembrar(paquete, marca){
+  if (!paquete || !paquete.ops || LOCAL[marca] === paquete.v) return;
+  LOCAL[marca] = paquete.v;
+  let n = 0;
+  paquete.ops.forEach(o => {
+    if (OPIDS.has(o.id)) return;
+    OPIDS.add(o.id); OPS.push(o); LOCAL.pending.push(o.id); n++;
+  });
+  if (n) console.log('Cargados', n, 'registros de la planilla (' + marca + ').');
+}
 function sembrarHistorial(){
+  sembrar(SEEDF, 'seedf');
   if (!SEED || !SEED.ops || LOCAL.seed === SEED.v) return;
   LOCAL.seed = SEED.v;
   let n = 0;
@@ -1478,6 +1861,7 @@ function render(){
   pintarJornada();
   if (LOCAL.tab === 'stock'){ renderCats(); renderStock(); }
   else if (LOCAL.tab === 'ventas') renderVentas();
+  else if (LOCAL.tab === 'ferias') renderFerias();
   else if (LOCAL.tab === 'mat') renderMat();
   else renderHist();
   SYNC.setState(SYNC.st);
