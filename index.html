@@ -1803,7 +1803,12 @@ function editFecha(fid, xid){
   const fx = xid ? fe.fechas.find(x => x.id === xid) : {fecha: LOCAL.fdia || todayISO(), hora: fe.hora || ''};
   sheet(`<h3>${xid?'Editar fecha':'Agregar fecha'}</h3>
    <div class="tiny muted">${esc(fe.nombre)}</div>
-   <div class="f"><label>Fecha</label><input id="xf" type="date" value="${esc(fx.fecha||todayISO())}"></div>
+   ${xid ? `<div class="f"><label>Fecha</label><input id="xf" type="date" value="${esc(fx.fecha||todayISO())}"></div>`
+   : `<div class="f2">
+        <div class="f"><label>Desde</label><input id="xf" type="date" value="${esc(fx.fecha||todayISO())}"></div>
+        <div class="f"><label>Hasta</label><input id="xh2" type="date" value=""></div>
+      </div>
+      <div class="tiny muted" id="xrango" style="margin-top:-4px"></div>`}
    <div class="f2">
      <div class="f"><label>Horario</label><input id="xh" value="${esc(fx.hora||'')}" placeholder="13-18 hs"></div>
      <div class="f"><label>Costo del puesto</label><input id="xc" inputmode="numeric" value="${fx.costo||''}" placeholder="${fe.costo||0}"></div>
@@ -1812,16 +1817,44 @@ function editFecha(fid, xid){
    <div class="f"><button class="btn pri">Guardar</button></div>
    ${xid?`<div class="f"><button class="btn gh danger" id="delfx">Eliminar esta fecha</button></div>`:''}`,
   () => {
-    const datos = {fecha:$('#xf').value || todayISO(), hora:$('#xh').value.trim(),
-      costo: parseInt(($('#xc').value||'0').replace(/\D/g,''),10)||0, nota:$('#xn').value.trim()};
-    if (xid) addOp({ty:'edit', t:xid, patch:datos});
-    else addOp(Object.assign({ty:'ffecha', f:fid}, datos));
-    FMES = datos.fecha.slice(0,7);
-    closeSheet(); renderFerias(); toast('<b>Fecha guardada</b>');
+    const d1 = $('#xf').value || todayISO();
+    const d2 = (!xid && $('#xh2') && $('#xh2').value) ? $('#xh2').value : d1;
+    const base = {hora:$('#xh').value.trim(),
+      costo: parseInt(($('#xc').value||'0').replace(/\D/g,''),10) || 0,
+      nota:$('#xn').value.trim()};
+    if (xid){
+      addOp({ty:'edit', t:xid, patch:Object.assign({fecha:d1}, base)});
+      FMES = d1.slice(0,7); closeSheet(); renderFerias(); toast('<b>Fecha guardada</b>');
+      return;
+    }
+    const dias = rangoDias(d1, d2);
+    // el costo del puesto se carga una sola vez, en el primer día
+    dias.forEach((d, i) => addOp(Object.assign({ty:'ffecha', f:fid, fecha:d}, base,
+      {costo: i === 0 ? base.costo : 0})));
+    FMES = d1.slice(0,7);
+    closeSheet(); renderFerias();
+    toast(dias.length > 1 ? `<b>${dias.length} fechas</b> agregadas` : '<b>Fecha guardada</b>');
   });
+  if ($('#xh2')){
+    const pintar = () => {
+      const n = rangoDias($('#xf').value, $('#xh2').value || $('#xf').value).length;
+      $('#xrango').textContent = n > 1
+        ? `Se van a crear ${n} fechas, una por día. El costo del puesto se carga una sola vez, en el primero.`
+        : 'Si la feria dura varios días, poné hasta cuándo.';
+    };
+    $('#xf').onchange = pintar; $('#xh2').onchange = pintar; pintar();
+  }
   if ($('#delfx')) $('#delfx').onclick = () => confirmSheet('¿Seguro?',
     `Se va a eliminar la fecha del <b>${prettyDate(fx.fecha)}</b> de ${esc(fe.nombre)}.`,
     'Eliminar', () => { addOp({ty:'void', t:xid}); closeSheet(); renderFerias(); toast('<b>Fecha eliminada</b>'); });
+}
+/* días entre dos fechas, inclusive, con tope de 60 */
+function rangoDias(d1, d2){
+  if (!d1) return [];
+  if (!d2 || d2 < d1) return [d1];
+  const out = []; let d = d1;
+  while (d <= d2 && out.length < 60){ out.push(d); d = shiftDays(d, 1); }
+  return out;
 }
 
 /* ============ agregar variante ============ */
