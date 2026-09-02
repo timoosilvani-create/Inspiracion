@@ -480,22 +480,22 @@ const EST = [
   {k:'descartada', n:'Descartada', c:'#D0C3AE', d:'Evaluada y no vamos'}
 ];
 const estInfo = k => EST.find(x => x.k === k) || EST[0];
-const COMIS = 0.0507;       // comisión de Mercado Pago (QR / tarjeta)
-const RETEN = 0.025;        // retención de Ingresos Brutos CABA
 const PAGOS = [
-  {k:'ef', n:'Efectivo o transferencia', corto:'Efectivo/transf.', com:0, ret:0},
-  {k:'tj', n:'Tarjeta o QR', corto:'Tarjeta/QR', com:COMIS, ret:RETEN}
+  {k:'ef', n:'Efectivo o transferencia'},
+  {k:'tj', n:'Tarjeta o QR'}
 ];
 const pagoInfo = k => PAGOS.find(x => x.k === k) || PAGOS[0];
-/* descuentos de una lista de ventas */
+/* bruto = por lo que se vendió · neto = lo que finalmente entró */
+const brutoV = v => v.q * v.p;
+const netoV  = v => (v.pago === 'tj' && v.neto != null && v.neto !== '') ? +v.neto : brutoV(v);
 function cortes(list){
-  let bruto = 0, com = 0, ret = 0, tarjeta = 0;
+  let bruto = 0, neto = 0, tarjeta = 0, tarjetaNeto = 0;
   list.forEach(v => {
-    const t = v.q * v.p, pg = pagoInfo(v.pago);
-    bruto += t; com += t * pg.com; ret += t * pg.ret;
-    if (pg.com || pg.ret) tarjeta += t;
+    const b = brutoV(v), n = netoV(v);
+    bruto += b; neto += n;
+    if (v.pago === 'tj'){ tarjeta += b; tarjetaNeto += n; }
   });
-  return {bruto, com, ret, tarjeta, neto: bruto - com - ret};
+  return {bruto, neto, desc: bruto - neto, tarjeta, tarjetaNeto};
 }
 const CHANNELS = ['Feria','Tienda Nube','Pedidos / encargos','Amigos y familia'];
 const norm = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
@@ -656,6 +656,7 @@ function derive(){
                  q: p.q != null ? p.q : o.q, p: p.p != null ? p.p : o.p,
                  ch: p.ch || o.ch, un, j: p.j !== undefined ? p.j : o.j,
                  pago: p.pago || o.pago || 'ef',
+                 neto: p.neto !== undefined ? p.neto : o.neto,
                  st: (p.st != null ? p.st : o.st) !== false, imp: !!o.imp};
       v.u = v.q * v.un;
       if (v.st) stock[v.k] = (stock[v.k] || 0) - v.u;
@@ -742,7 +743,7 @@ function asegurarJornada(){
 
 const qty = k => (D.stock[k] || 0);
 const priceFor = k => (D.prices[k] != null ? D.prices[k] : (VAR[k] ? VAR[k].price : 0));
-const totalOf = list => list.reduce((a,v) => a + v.q*v.p, 0);
+const totalOf = list => list.reduce((a,v) => a + netoV(v), 0);
 const unitsOf = list => list.reduce((a,v) => a + v.q, 0);
 
 /* ---- variantes ---- */
@@ -1086,10 +1087,11 @@ function agg(list){
   const m = {};
   list.forEach(v => {
     const id = v.k+'@'+v.p+'@'+v.ch+'@'+v.un+'@'+v.pago;
-    if (!m[id]) m[id] = {k:v.k, p:v.p, ch:v.ch, un:v.un, pago:v.pago, q:0, u:0, ids:[]};
-    m[id].q += v.q; m[id].u += v.u; m[id].ids.push(v.id);
+    if (!m[id]) m[id] = {k:v.k, p:v.p, ch:v.ch, un:v.un, pago:v.pago, q:0, u:0, bruto:0, neto:0, ids:[]};
+    m[id].q += v.q; m[id].u += v.u; m[id].bruto += brutoV(v); m[id].neto += netoV(v);
+    m[id].ids.push(v.id);
   });
-  return Object.values(m).sort((a,b) => b.q*b.p - a.q*a.p);
+  return Object.values(m).sort((a,b) => b.neto - a.neto);
 }
 /* agrupa las líneas por categoría, con subtotal */
 function porCategoria(list){
@@ -1100,10 +1102,10 @@ function porCategoria(list){
   });
   return DATA.cats.filter(c => g[c.id]).map(c => ({
     cat:c, lineas:g[c.id],
-    total:g[c.id].reduce((a,l) => a + l.q*l.p, 0),
+    total:g[c.id].reduce((a,l) => a + l.neto, 0),
     piezas:g[c.id].reduce((a,l) => a + l.u, 0)
   })).concat(g['?'] ? [{cat:{n:'Otros', id:'?'}, lineas:g['?'],
-    total:g['?'].reduce((a,l)=>a+l.q*l.p,0), piezas:g['?'].reduce((a,l)=>a+l.u,0)}] : []);
+    total:g['?'].reduce((a,l)=>a+l.neto,0), piezas:g['?'].reduce((a,l)=>a+l.u,0)}] : []);
 }
 function bloquesCat(list){
   return porCategoria(list).map(g => `
@@ -1124,11 +1126,11 @@ function renderVentas(){
     <div class="lbl">${esc(j.nombre)} · ${esc(j.canal)}</div>
     <div class="big">${money(total)}</div>
     <div class="sub">${piezas} pieza${piezas===1?'':'s'} · abierta desde ${prettyDate(j.fecha)}</div>
-    ${c.tarjeta ? `<div class="brk">
-       <span>Tarjeta · ${money(c.tarjeta)}</span>
-       <span>Comisión · −${money(c.com)}</span>
-       <span>Retención IIBB · −${money(c.ret)}</span>
-       <span class="fuerte">Neto · ${money(total - c.com - c.ret)}</span></div>` : ''}
+    ${c.desc ? `<div class="brk">
+       <span>Vendido · ${money(c.bruto)}</span>
+       <span>Descuentos de tarjeta · −${money(c.desc)}</span>
+       <span class="fuerte">Neto · ${money(c.neto)}</span></div>`
+     : (c.tarjeta ? `<div class="brk"><span>Tarjeta · ${money(c.tarjeta)}</span></div>` : '')}
   </div>`; })() : `<div class="empty"><img src="${LOGO}"><div>No hay ninguna jornada abierta.</div></div>`}
 
   ${otras.length ? `<div class="tiny muted" style="padding:0 3px 6px">Otras jornadas abiertas</div>
@@ -1164,7 +1166,8 @@ function vline(l){
     <span class="sw" style="${swStyle(v.sw)}"></span>
     <div class="nm"><b>${esc(v.catName)} ${tit}</b><span>${esc(v.color)} · ${esc(l.ch)}${l.un>1?' · '+l.u+' unidades':''}${l.pago==='tj'?' · <b class="tj">tarjeta</b>':''}</span></div>
     <span class="q">×${l.q}</span>
-    <div class="pr"><b>${money(l.q*l.p)}</b><span class="ed">${l.p?money(l.p)+' c/u':'sin precio'}</span></div>
+    <div class="pr"><b>${money(l.neto)}</b><span class="ed">${l.neto !== l.bruto
+        ? 'vendido ' + money(l.bruto) : (l.p ? money(l.p)+' c/u' : 'sin precio')}</span></div>
     <span class="ar">›</span></div>`;
 }
 function bindLines(root){
@@ -1183,8 +1186,10 @@ function editSale(ids){
      <div class="f"><label>Precio c/u</label><input id="ep" inputmode="numeric" value="${p0||''}" placeholder="0"></div>
    </div>
    <div class="f"><label>Canal</label><select id="ech">${CHANNELS.map(c => `<option ${c===ch0?'selected':''}>${esc(c)}</option>`).join('')}</select></div>
-   <div class="f"><label>Medio de pago</label><select id="epg">${PAGOS.map(x => `<option value="${x.k}" ${x.k===(vs[0].pago||'ef')?'selected':''}>${x.n}${x.com?' — descuenta '+((x.com+x.ret)*100).toFixed(2).replace('.',',')+'%':''}</option>`).join('')}</select></div>
-   <div class="tiny muted" id="epgd" style="margin-top:6px"></div>
+   <div class="f"><label>Medio de pago</label><select id="epg">${PAGOS.map(x => `<option value="${x.k}" ${x.k===(vs[0].pago||'ef')?'selected':''}>${esc(x.n)}</option>`).join('')}</select></div>
+   <div class="f hide" id="enetow"><label>Neto recibido</label>
+     <input id="eneto" inputmode="numeric" value="${vs[0].neto != null ? vs[0].neto : ''}" placeholder="lo que entró finalmente">
+     <div class="tiny muted" id="epgd" style="margin-top:6px"></div></div>
    ${abiertas.length ? `<div class="f"><label>Mover a otra jornada</label><select id="ej">
      <option value="">— dejar donde está —</option>
      ${abiertas.map(x => `<option value="${x.id}">${esc(x.nombre)}</option>`).join('')}</select></div>` : ''}
@@ -1197,7 +1202,10 @@ function editSale(ids){
     const np = parseInt(($('#ep').value||'0').replace(/\D/g,''),10) || 0;
     const nch = $('#ech').value, nj = $('#ej') ? $('#ej').value : '';
     if (!nq){ closeSheet(); askDeleteSale(ids, q0*un, k, p0); return; }
-    const patch = {q:nq, p:np, ch:nch, pago: $('#epg').value};
+    const pg = $('#epg').value;
+    const nn = (pg === 'tj' && $('#eneto').value.trim())
+      ? (parseInt($('#eneto').value.replace(/\D/g,''),10) || 0) : null;
+    const patch = {q:nq, p:np, ch:nch, pago:pg, neto:nn};
     if (nj) patch.j = nj;
     vs.forEach((v,i) => addOp(i === 0 ? {ty:'edit', t:v.id, patch} : {ty:'void', t:v.id}));
     if ($('#eperm').checked) addOp({ty:'price', k, p: un > 1 ? Math.round(np/un) : np});
@@ -1205,15 +1213,23 @@ function editSale(ids){
     toast('<b>Cambios guardados</b>');
   });
   const pintarPago = () => {
-    const pg = pagoInfo($('#epg').value);
+    const tj = $('#epg').value === 'tj';
+    $('#enetow').classList.toggle('hide', !tj);
+    if (!tj){ $('#epgd').textContent = ''; return; }
     const nq = Math.max(0, parseInt(($('#eq').value||'0').replace(/\D/g,''),10) || 0);
     const np = parseInt(($('#ep').value||'0').replace(/\D/g,''),10) || 0;
-    const t = nq*np;
-    $('#epgd').innerHTML = pg.com
-      ? `Sobre ${money(t)}: comisión ${money(t*pg.com)} (5,07%) y retención de IIBB ${money(t*pg.ret)} (2,5%). Neto ${money(t*(1-pg.com-pg.ret))}.`
-      : 'Sin descuentos.';
+    const bruto = nq*np;
+    const nn = $('#eneto').value.trim() ? (parseInt($('#eneto').value.replace(/\D/g,''),10) || 0) : null;
+    if (nn == null){
+      $('#epgd').innerHTML = `Se vendió por <b>${money(bruto)}</b>. Poné cuánto entró finalmente; si lo dejás vacío se toma el mismo importe.`;
+    } else {
+      const d = bruto - nn, pct = bruto ? (d/bruto*100) : 0;
+      $('#epgd').innerHTML = `Se vendió por <b>${money(bruto)}</b> y entraron <b>${money(nn)}</b>.` +
+        (d ? ` Diferencia ${money(d)} (${pct.toFixed(2).replace('.',',')}%).` : '');
+    }
   };
-  $('#epg').onchange = pintarPago; $('#eq').oninput = pintarPago; $('#ep').oninput = pintarPago;
+  $('#epg').onchange = pintarPago; $('#eq').oninput = pintarPago;
+  $('#ep').oninput = pintarPago; $('#eneto').oninput = pintarPago;
   pintarPago();
   $('#dele').onclick = () => askDeleteSale(ids, q0*un, k, p0);
 }
@@ -1312,10 +1328,10 @@ function renderHist(){
      <div class="big">${money(total)}</div>
      <div class="sub">${h.length} jornada${h.length===1?'':'s'}${piezas?' · '+piezas+' pz':''}${filtro ? ' · ' + pc(total) + ' del total' : ''}</div>
      ${(() => { const c = cortes(h.flatMap(j => j.ventas));
-        return (c.tarjeta || filtro) ? `<div class="brk">
+        return (c.desc || filtro) ? `<div class="brk">
           ${filtro?`<span>Total general · ${money(grand)}</span>`:''}
-          ${c.tarjeta?`<span>Comisión · −${money(c.com)}</span><span>Retención IIBB · −${money(c.ret)}</span>
-            <span class="fuerte">Neto · ${money(total - c.com - c.ret)}</span>`:''}</div>` : ''; })()}
+          ${c.desc?`<span>Vendido · ${money(c.bruto)}</span>
+            <span>Descuentos de tarjeta · −${money(c.desc)}</span>`:''}</div>` : ''; })()}
    </div>
 
    <div class="cfilt">
@@ -1333,10 +1349,10 @@ function renderHist(){
         <div class="hbody hide">
           ${j.ventas.length ? bloquesCat(j.ventas) : ''}
           ${j.monto ? `<div class="vline"><div class="nm"><b>Importe sin desglosar</b><span>tomado de la planilla</span></div><div class="pr"><b>${money(j.monto)}</b></div></div>` : ''}
-          ${cj.tarjeta ? `<div class="vline"><div class="nm"><b>Descuentos de tarjeta</b>
-             <span>sobre ${money(cj.tarjeta)} · comisión ${money(cj.com)} + retención ${money(cj.ret)}</span></div>
-             <div class="pr"><b style="color:var(--terra)">−${money(cj.com + cj.ret)}</b>
-             <span class="ed" style="color:var(--ok)">neto ${money(t - cj.com - cj.ret)}</span></div></div>` : ''}
+          ${cj.desc ? `<div class="vline"><div class="nm"><b>Descuentos de tarjeta</b>
+             <span>se vendió por ${money(cj.tarjeta)} y entraron ${money(cj.tarjetaNeto)}</span></div>
+             <div class="pr"><b style="color:var(--terra)">−${money(cj.desc)}</b>
+             <span class="ed">${cj.tarjeta ? (cj.desc/cj.tarjeta*100).toFixed(2).replace('.',',')+'%' : ''}</span></div></div>` : ''}
           <div class="pad row" style="gap:8px">
             <button class="btn gh editj" data-id="${j.id}">Editar</button>
             <button class="btn gh csvj" data-id="${j.id}">CSV</button>
@@ -1989,20 +2005,20 @@ function dl(name, text, mime){
   setTimeout(() => URL.revokeObjectURL(a.href), 2000);
 }
 function exportCSV(j, name){
-  const rows = [['Jornada','Fecha','Canal','Categoría','Medida','Color','Cantidad','Unidades','Precio unit.','Total']];
+  const rows = [['Jornada','Fecha','Canal','Categoría','Medida','Color','Cantidad','Unidades','Precio unit.','Vendido','Medio de pago','Neto recibido']];
   let gran = 0;
   porCategoria(j.ventas || []).forEach(g => {
     g.lineas.forEach(l => {
       const v = VAR[l.k] || {catName:'?', size:'', color:l.k};
       rows.push([j.nombre||'', j.fecha||'', l.ch, v.catName, v.unit ? ('juego ×'+l.un) : v.size,
-                 v.color, l.q, l.u, l.p, l.q*l.p]);
+                 v.color, l.q, l.u, l.p, l.bruto, pagoInfo(l.pago).n, l.neto]);
     });
-    rows.push(['','','','Subtotal ' + g.cat.n, '', '', '', g.piezas, '', g.total]);
+    rows.push(['','','','Subtotal ' + g.cat.n, '', '', '', g.piezas, '', '', '', g.total]);
     rows.push([]);
     gran += g.total;
   });
-  if (j.monto){ rows.push(['','','','Importe sin desglosar','','','','','', j.monto]); gran += j.monto; }
-  rows.push(['','','','TOTAL','','','','','', gran]);
+  if (j.monto){ rows.push(['','','','Importe sin desglosar','','','','','','','', j.monto]); gran += j.monto; }
+  rows.push(['','','','TOTAL NETO','','','','','','','', gran]);
   dl('inspiracion-'+name+'.csv', rows.map(r => r.map(c => `"${String(c==null?'':c).replace(/"/g,'""')}"`).join(';')).join('\n'));
 }
 function backup(){ dl('inspiracion-backup-'+todayISO()+'.json', JSON.stringify({v:2, ops:OPS}), 'application/json'); }
