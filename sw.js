@@ -2,7 +2,7 @@
    - index.html y config.js: primero red, si no hay señal usa la copia guardada.
    - resto (librerías, íconos): primero la copia guardada, y se actualiza de fondo.
    Al cambiar VER se renueva toda la caché. */
-const VER   = 'v54';
+const VER   = 'v55';
 const CACHE = 'inspiracion-stock-' + VER;
 const FILES = ['./', './index.html', './config.js', './supabase.js', './manifest.webmanifest',
                './icon-192.png', './icon-512.png', './icon-maskable.png', './apple-icon.png'];
